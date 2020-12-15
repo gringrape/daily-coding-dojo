@@ -6,10 +6,10 @@
 
 plugins {
     // Apply the Kotlin JVM plugin to add support for Kotlin on the JVM.
-    id 'org.jetbrains.kotlin.jvm' version '1.3.31'
+    id("org.jetbrains.kotlin.jvm").version("1.3.31")
 
     // Apply the application plugin to add support for building a CLI application.
-    id 'application'
+    application
 }
 
 repositories {
@@ -20,16 +20,16 @@ repositories {
 
 dependencies {
     // Use the Kotlin JDK 8 standard library.
-    implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 
     // Use the Kotlin test library.
-    testImplementation 'org.jetbrains.kotlin:kotlin-test'
-
+    testImplementation("org.jetbrains.kotlin:kotlin-test")
+    testCompile("org.assertj:assertj-core:3.11.1")
     // Use the Kotlin JUnit integration.
-    testImplementation 'org.jetbrains.kotlin:kotlin-test-junit'
+    testImplementation("org.jetbrains.kotlin:kotlin-test-junit")
 }
 
 application {
     // Define the main class for the application
-    mainClassName = 'AppKt'
+    mainClassName = "AppKt"
 }
