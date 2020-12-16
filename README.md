@@ -5,5 +5,5 @@ K 번째 수 - Kotlin
 
 ## 20201216
 ### 계획
-- [ ] ~~코틀린에서 파이프라이닝 활용하기 https://medium.com/@krpiotrek/kotlin-pipeline-syntax-191b59429c38
+- [ ] ~~코틀린에서 파이프라이닝 활용하기 https://medium.com/@krpiotrek/kotlin-pipeline-syntax-191b59429c38~~
 - [ ] 자바스크립트로 k 번째수 다시 풀이
