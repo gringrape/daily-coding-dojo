@@ -25,7 +25,7 @@ function solution(arr, commands) {
       sortInc,
       pick(k)
     ])
-    .map(([f1, f2, f3, f4]) => f4(f3(f2(f1(arr)))));
+    .map((fs) => fs.reduce((acc, f) => f(acc), arr));
 }
 
 module.exports = {
