@@ -69,11 +69,9 @@ function countMul(dolls, basket = [], count = 0) {
   
   const currentDoll = dolls[0];
 
-  if (getLast(basket) !== currentDoll) {
-    return countMul(dolls.slice(1), put(currentDoll, basket), count);
-  }
-  
-  return countMul(dolls.slice(1), bang(basket), count + 2);
+  return (getLast(basket) === currentDoll) 
+    ? countMul(dolls.slice(1), bang(basket), count + 2)
+    : countMul(dolls.slice(1), put(currentDoll, basket), count);
 }
 
 test('countMul', () => {
@@ -81,6 +79,13 @@ test('countMul', () => {
   expect(countMul([5, 4, 2, 2], [1, 3, 4, 5])).toBe(6);
   expect(countMul([4, 3, 1, 1, 3, 2, 4], [])).toBe(4);
 });
+
+function makeEmpty(twoDimArray, i, j) {
+  return twoDimArray
+    .map((row, rIdx) => row
+      .map((num, cIdx) => (rIdx === i && cIdx === j) ? 0 : num)
+    )
+}
 
 // 4. 인형을 여러번 든다.
 function liftDolls(board, moves) {
@@ -91,12 +96,9 @@ function liftDolls(board, moves) {
   const [lifted, nth] = liftDoll(board, moves[0]) ?? [];
   const leftMoves = moves.slice(1);
   
-  if (!lifted) {
-    return [...liftDolls(board, leftMoves)];
-  }
-
-  board[nth - 1][moves[0] - 1] = 0;
-  return [lifted, ...liftDolls(board, leftMoves)];
+  return lifted
+    ? [lifted, ...liftDolls(makeEmpty(board, nth - 1, moves[0] - 1), leftMoves)]
+    : [...liftDolls(board, leftMoves)];
 }
 
 test('liftDolls', () => {
