@@ -88,27 +88,31 @@ function makeEmpty(twoDimArray, i, j) {
 }
 
 // 4. 인형을 여러번 든다.
-function liftDolls(board, moves) {
-  if (moves.length === 0) {
-    return [];
+function* liftDolls(board, moves) {
+  const [doll, j] = liftDoll(board, moves[0]) ?? [];
+
+  if (moves.length === 0 || !doll) {
+    return;
   }
-    
-  const [lifted, nth] = liftDoll(board, moves[0]) ?? [];
-  const leftMoves = moves.slice(1);
-  
-  return lifted
-    ? [lifted, ...liftDolls(makeEmpty(board, nth - 1, moves[0] - 1), leftMoves)]
-    : [...liftDolls(board, leftMoves)];
+
+  yield doll;
+  const updatedBoard = makeEmpty(board, j - 1, moves[0] - 1);
+  yield* liftDolls(updatedBoard, moves.slice(1));
 }
 
 test('liftDolls', () => {
-  expect(liftDolls([[0,0,0,0,0],[0,0,1,0,3],[0,2,5,0,1],[4,2,4,4,2],[3,5,1,3,1]], [1, 1]))
-    .toEqual([4, 3]);
-});
+  const it = liftDolls([[0,0,0,0,0],[0,0,1,0,3],[0,2,5,0,1],[4,2,4,4,2],[3,5,1,3,1]], [1, 1, 1]);
+  expect([...it]).toEqual([4, 3]);
+})
+
+// test('liftDolls', () => {
+//   expect([...liftDolls([[0,0,0,0,0],[0,0,1,0,3],[0,2,5,0,1],[4,2,4,4,2],[3,5,1,3,1]], [1, 1])])
+//     .toEqual([4, 3]);
+// });
 
 
 function solution(board, moves) {
-  const dolls = liftDolls(board, moves);
+  const dolls = [...liftDolls(board, moves)];
 
   return countMul(dolls);
 }
