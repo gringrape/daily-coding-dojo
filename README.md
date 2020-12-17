@@ -27,5 +27,5 @@ $jsonfile = './package.json'
 $json = Get-Content $jsonfile | Out-String | ConvertFrom-Json
 $json.scripts | Add-Member -Type NoteProperty -Name test -Value jest -Force
 $json | ConvertTo-Json | Set-Content $jsonfile
-echo '#풀어보자' > readme.md 
+echo '#풀어보자' > README.md 
 ```
