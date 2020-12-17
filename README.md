@@ -18,6 +18,6 @@ npm i jest @types/jest
 echo node_modules > .gitignore
 $jsonfile = './package.json'
 $json = Get-Content $jsonfile | Out-String | ConvertFrom-Json
-$json.scripts | Add-Member -Type NoteProperty -Name test -Value testtest -Force
+$json.scripts | Add-Member -Type NoteProperty -Name test -Value jest -Force
 $json | ConvertTo-Json | Set-Content $jsonfile
 ```
