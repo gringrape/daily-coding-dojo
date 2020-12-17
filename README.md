@@ -1,5 +1,12 @@
-# daily_coding_dojo_kds
-## Javascript - powershell
+# Daily Coding Dojo
+
+## How
+Make folder with today date as name
+Write some code for solving today question 
+Write README about how you solve it
+
+## Commands
+### Javascript - powershell
 ```
 $date = Get-Date -Format "yyyyMMdd"
 mkdir $date
@@ -8,7 +15,7 @@ npm init -y
 npm i jest @types/jest
 echo node_modules > .gitignore
 ```
-## Javascript - powershell + test script 'jest' 추가
+### Javascript - powershell + test script 'jest' 추가
 ```
 $date = Get-Date -Format "yyyyMMdd"
 mkdir $date
