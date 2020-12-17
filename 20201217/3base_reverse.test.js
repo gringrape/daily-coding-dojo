@@ -58,3 +58,19 @@ test('changeToTenBaseNumber', () => {
   expect(solution(45)).toBe(7);
   expect(solution(125)).toBe(229);
 });
+
+function solution2(number) {
+  const threeBaseString = number
+    .toString(3)
+    .split('')
+    .reverse()
+    .join('');
+
+  return parseInt(threeBaseString, 3);
+}
+
+test('changeToTenBaseNumber', () => {
+  expect(solution(45)).toBe(7);
+  expect(solution(125)).toBe(229);
+});
+
