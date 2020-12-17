@@ -25,20 +25,14 @@ test('getMyReserve', () => {
 });
 
 function findLender({ student, reserve }) {
-  if (reserve.includes(student - 1)) {
-    return 'LEFT';
-  }
-  if (reserve.includes(student + 1)) {
-    return 'RIGHT';
-  }
-  return 'NO';
+  return [student - 1, student + 1].find((num) => reserve.includes(num)) || null;
 }
 
 test('findLender', () => {
-  expect(findLender({student: 1, reserve: [2]})).toEqual('RIGHT');
-  expect(findLender({student: 2, reserve: [1]})).toEqual('LEFT');
-  expect(findLender({student: 2, reserve: [1, 3]})).toEqual('LEFT');
-  expect(findLender({student: 2, reserve: [4]})).toEqual('NO');
+  expect(findLender({student: 1, reserve: [2]})).toEqual(2);
+  expect(findLender({student: 2, reserve: [1]})).toEqual(1);
+  expect(findLender({student: 2, reserve: [1, 3]})).toEqual(1);
+  expect(findLender({student: 2, reserve: [4]})).toEqual(null);
 });
 
 function borrowAll({ lost, reserve }) {
@@ -46,18 +40,13 @@ function borrowAll({ lost, reserve }) {
     const { lost, reserve } = acc;
     const lender = findLender({ student, reserve});
 
-    if (lender === 'NO') {
+    if (!lender) {
       return acc;
     }
 
-    const lenderNo = {
-      'LEFT': student - 1,
-      'RIGHT': student + 1,
-    };
-
     return {
       lost: lost.filter((each) => each !== student),
-      reserve: reserve.filter((each) => each !== lenderNo[lender]),
+      reserve: reserve.filter((each) => each !== lender),
     }
 
   }, { lost, reserve });
