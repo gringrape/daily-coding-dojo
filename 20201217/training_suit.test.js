@@ -24,40 +24,40 @@ test('getMyReserve', () => {
   });
 });
 
-function canBorrow({ lost, reserve }) {
-  if (reserve.includes(lost - 1)) {
+function findLender({ student, reserve }) {
+  if (reserve.includes(student - 1)) {
     return 'LEFT';
   }
-  if (reserve.includes(lost + 1)) {
+  if (reserve.includes(student + 1)) {
     return 'RIGHT';
   }
   return 'NO';
 }
 
-test('canBorrow', () => {
-  expect(canBorrow({lost: 1, reserve: [2]})).toEqual('RIGHT');
-  expect(canBorrow({lost: 2, reserve: [1]})).toEqual('LEFT');
-  expect(canBorrow({lost: 2, reserve: [1, 3]})).toEqual('LEFT');
-  expect(canBorrow({lost: 2, reserve: [4]})).toEqual('NO');
+test('findLender', () => {
+  expect(findLender({student: 1, reserve: [2]})).toEqual('RIGHT');
+  expect(findLender({student: 2, reserve: [1]})).toEqual('LEFT');
+  expect(findLender({student: 2, reserve: [1, 3]})).toEqual('LEFT');
+  expect(findLender({student: 2, reserve: [4]})).toEqual('NO');
 });
 
 function borrowAll({ lost, reserve }) {
   return lost.reduce((acc, student) => {
     const { lost, reserve } = acc;
-    const borrowable = canBorrow({ lost:student, reserve});
+    const lender = findLender({ student, reserve});
 
-    if (borrowable === 'NO') {
+    if (lender === 'NO') {
       return acc;
     }
 
-    const borrower = {
+    const lenderNo = {
       'LEFT': student - 1,
       'RIGHT': student + 1,
     };
 
     return {
       lost: lost.filter((each) => each !== student),
-      reserve: reserve.filter((each) => each !== borrower[borrowable]),
+      reserve: reserve.filter((each) => each !== lenderNo[lender]),
     }
 
   }, { lost, reserve });
