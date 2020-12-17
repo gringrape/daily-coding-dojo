@@ -1,9 +1,9 @@
 # Daily Coding Dojo
 
 ## How
-Make folder with today date as name
-Write some code for solving today question 
-Write README about how you solve it
+> Make folder with today date as name
+> Write some code for solving today question 
+> Write README about how you solve it
 
 ## Commands
 ### Javascript - powershell
