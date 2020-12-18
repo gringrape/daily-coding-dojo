@@ -21,11 +21,12 @@ $date = Get-Date -Format "yyyyMMdd"
 mkdir $date
 cd $date
 npm init -y
-npm i jest @types/jest
+npm i jest @types/jest eslint
 echo node_modules > .gitignore
 $jsonfile = './package.json'
 $json = Get-Content $jsonfile | Out-String | ConvertFrom-Json
 $json.scripts | Add-Member -Type NoteProperty -Name test -Value jest -Force
 $json | ConvertTo-Json | Set-Content $jsonfile
 echo '#풀어보자' > README.md 
+npx eslint --init
 ```
