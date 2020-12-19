@@ -1,27 +1,30 @@
-function solution(n, k, stack = [], p = 0) {
-  if (k === 0) {
-    return stack.join('') + n.slice(p);
-  }
+function solution(n, k) {
+  let p = 0;
+  let stack = [];
+  while (k > 0) {
+    if (p > n.length - 1) {
+      return stack.join('').slice(0, -k);
+    }
 
-  if (p > n.length - 1) {
-    return stack.join('').slice(0, -k);
-  }
+    const currentNumber = n[p];
+    if (stack.length === 0) {
+      stack.push(currentNumber);
+      p += 1;
+      continue;
+    }
 
-  const currentNumber = n[p];
-  if (stack.length === 0) {
+    const lastIndex = stack.length - 1;
+
+    if (stack[lastIndex] < currentNumber) {
+      stack.pop();
+      k -= 1;
+      continue;
+    }
+
     stack.push(currentNumber);
-    return solution(n, k, stack, p + 1);
+    p += 1;
   }
-
-  const lastIndex = stack.length - 1;
-
-  if (stack[lastIndex] < currentNumber) {
-    stack.pop();
-    return solution(n, k - 1, stack, p);
-  }
-
-  stack.push(currentNumber);
-  return solution(n, k, stack, p + 1);
+  return stack.join('') + n.slice(p);
 }
 
 test('solution', () => {
