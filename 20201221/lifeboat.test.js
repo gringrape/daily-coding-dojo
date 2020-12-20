@@ -1,35 +1,34 @@
 function solution(
   people,
   limit,
-  sorted = people.sort((a, b) => a - b),
-  count = 0,
 ) {
-  if (sorted.length === 0) {
-    return count;
-  }
+  const sorted = people.sort((a, b) => a - b);
 
-  const [first] = sorted;
+  let count = 0;
+  while (sorted.length > 0) {
+    const [first] = sorted;
 
-  const secondIndex = sorted.findIndex((weight) => weight > limit - first) - 1;
+    const secondIndex = sorted.findIndex((weight) => weight > limit - first) - 1;
 
-  if (secondIndex > 0) {
-    sorted.splice(secondIndex, 1);
+    if (secondIndex > 0) {
+      sorted.splice(secondIndex, 1);
+      sorted.shift();
+      count += 1;
+      continue;
+    }
+
+    if (secondIndex === -2) {
+      sorted.pop();
+      sorted.shift();
+
+      count += 1;
+      continue;
+    }
+
     sorted.shift();
-    return solution(people, limit, sorted, count + 1);
+    count += 1;
   }
-
-  if (secondIndex === -2) {
-    sorted.pop();
-    sorted.shift();
-
-    return solution(people,
-      limit,
-      sorted, count + 1);
-  }
-
-  sorted.shift();
-
-  return solution(people, limit, sorted, count + 1);
+  return count;
 }
 
 test('solution', () => {
