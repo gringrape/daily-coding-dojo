@@ -39,20 +39,20 @@ function isSquare(startI, startJ, arr, size) {
 function getMemoizedCount(i, j, countBoard) {
   return Math.min(
     countBoard.read(i - 1, j - 1), countBoard.read(i - 1, j), countBoard.read(i, j - 1),
-  );
+  ) + 1;
 }
 
 function findBiggestSquareSizeAt(
   i, j, arr, countBoard, count = getMemoizedCount(i, j, countBoard),
 ) {
-  const isOutOfBoundary = i + count >= arr.length || j + count >= arr[0].length;
-
-  if (isOutOfBoundary || !isSquare(i, j, arr, count)) {
-    countBoard.write(i, j, count);
-    return count;
+  if (i === 0 || j === 0) {
+    return 0;
   }
 
-  return findBiggestSquareSizeAt(i, j, arr, countBoard, count + 1);
+  const memoizedCount = getMemoizedCount(i, j, countBoard);
+  countBoard.write(i, j, memoizedCount);
+
+  return memoizedCount;
 }
 
 describe('findBiggestSquareSizeAt', () => {
