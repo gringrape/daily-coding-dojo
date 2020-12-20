@@ -13,19 +13,23 @@ function solution(
   const secondIndex = sorted.findIndex((weight) => weight > limit - first) - 1;
 
   if (secondIndex > 0) {
-    return solution(people, limit, [
-      ...sorted.slice(1, secondIndex),
-      ...sorted.slice(secondIndex + 1),
-    ], count + 1);
+    sorted.splice(secondIndex, 1);
+    sorted.shift();
+    return solution(people, limit, sorted, count + 1);
   }
 
   if (secondIndex === -2) {
+    sorted.pop();
+    sorted.shift();
+
     return solution(people,
       limit,
-      sorted.slice(1, -1), count + 1);
+      sorted, count + 1);
   }
 
-  return solution(people, limit, sorted.slice(1), count + 1);
+  sorted.shift();
+
+  return solution(people, limit, sorted, count + 1);
 }
 
 test('solution', () => {
