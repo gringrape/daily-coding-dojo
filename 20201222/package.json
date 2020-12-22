@@ -1,0 +1,21 @@
+{
+    "name": "20201222",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "test": "jest"
+    },
+    "keywords": [],
+    "author": "Jin Kim",
+    "license": "ISC",
+    "dependencies": {
+        "@types/jest": "^26.0.19",
+        "jest": "^26.6.3"
+    },
+    "devDependencies": {
+        "eslint": "^7.16.0",
+        "eslint-config-airbnb-base": "^14.2.1",
+        "eslint-plugin-import": "^2.22.1"
+    }
+}
