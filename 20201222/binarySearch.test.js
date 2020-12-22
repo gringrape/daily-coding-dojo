@@ -24,7 +24,7 @@ test('binarySearch', () => {
 });
 
 function binarySearchSmallerThan(arr, num, high = arr.length, low = -1) {
-  if (low === high || low === arr.length - 1) {
+  if (low + 1 === high) {
     return low;
   }
 
@@ -32,7 +32,7 @@ function binarySearchSmallerThan(arr, num, high = arr.length, low = -1) {
 
   return (arr[guess] <= num)
     ? binarySearchSmallerThan(arr, num, high, guess)
-    : binarySearchSmallerThan(arr, num, guess - 1, low);
+    : binarySearchSmallerThan(arr, num, guess, low);
 }
 
 test('binarySearchSmallerThan', () => {
@@ -40,4 +40,7 @@ test('binarySearchSmallerThan', () => {
   expect(binarySearchSmallerThan([1, 2, 3, 4, 8, 15], 10)).toBe(4);
   expect(binarySearchSmallerThan([1, 2, 3, 4, 8, 15], 20)).toBe(5);
   expect(binarySearchSmallerThan([1, 2, 3, 4, 8, 15], 0)).toBe(-1);
+  expect(binarySearchSmallerThan([1, 2, 3, 4, 8, 15], 3.5)).toBe(2);
+  expect(binarySearchSmallerThan([1, 2, 3, 4, 8, 15], 1.5)).toBe(0);
+  expect(binarySearchSmallerThan([1, 2, 3, 4, 8, 15], 2.5)).toBe(1);
 });
