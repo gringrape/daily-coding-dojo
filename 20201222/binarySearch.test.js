@@ -23,19 +23,21 @@ test('binarySearch', () => {
   expect(binarySearch([3, 7, 8, 9, 22, 54], 10)).toBe(-1);
 });
 
-function binarySearchNearest(arr, num, high = arr.length - 1, low = 0) {
-  if (low + 1 === high) {
+function binarySearchSmallerThan(arr, num, high = arr.length, low = -1) {
+  if (low === high || low === arr.length - 1) {
     return low;
   }
 
   const guess = Math.floor((high + low) / 2);
 
   return (arr[guess] <= num)
-    ? binarySearchNearest(arr, num, high, guess)
-    : binarySearchNearest(arr, num, guess - 1, low);
+    ? binarySearchSmallerThan(arr, num, high, guess)
+    : binarySearchSmallerThan(arr, num, guess - 1, low);
 }
 
-test('binarySearchNearest', () => {
-  expect(binarySearchNearest([1, 2, 3, 4, 8], 5)).toBe(3);
-  expect(binarySearchNearest([1, 2, 3, 4, 8, 15], 10)).toBe(4);
+test('binarySearchSmallerThan', () => {
+  expect(binarySearchSmallerThan([1, 2, 3, 4, 8], 5)).toBe(3);
+  expect(binarySearchSmallerThan([1, 2, 3, 4, 8, 15], 10)).toBe(4);
+  expect(binarySearchSmallerThan([1, 2, 3, 4, 8, 15], 20)).toBe(5);
+  expect(binarySearchSmallerThan([1, 2, 3, 4, 8, 15], 0)).toBe(-1);
 });
