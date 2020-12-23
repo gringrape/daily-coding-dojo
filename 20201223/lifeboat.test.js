@@ -8,7 +8,7 @@ function solution(people, limit) {
     } else {
       people.shift();
     }
-    count++;
+    count += 1;
   }
   return count;
 }
