@@ -1,12 +1,30 @@
 # Daily Coding Dojo
+매일 코딩 도장이 열립니다.
 
-## How
-Make folder with today date as name \
-Write some code for solving today question \
-Write README about how you solve it
+## 수련방법
+```
+해당날짜의 디렉토리를 만듭니다.
+사용하고 싶은 언어로 환경설정 합니다.
+풀고자하는 하는 문제를 README.md 에 적습니다.
+열심히 코딩하고 커밋합니다.
+반성을 적고 커밋합니다.
+```
 
-## Commands
-### Javascript - powershell
+### README 템플릿
+
+수련에 익숙해질때까지 템플릿에 따라서 충실하게 작성하도록 합니다.
+
+```
+문제제목
+1. 구하는 것은 무엇인가
+2. 주어진 것은 무엇인가
+3. 조건은 무엇인가
+4. 계획은 무엇인가
+5. (풀고난후) 회고와 개선계획
+```
+
+## 수련장 설정
+### Javascript - windows powershell
 ```
 $date = Get-Date -Format "yyyyMMdd"
 mkdir $date
