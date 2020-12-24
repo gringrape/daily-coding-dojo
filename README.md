@@ -38,6 +38,8 @@ echo node_modules > .gitignore
 $date = Get-Date -Format "yyyyMMdd"
 mkdir $date
 cd $date
+mkdir javascript
+cd javascript
 npm init -y
 npm i jest @types/jest eslint
 echo node_modules > .gitignore
