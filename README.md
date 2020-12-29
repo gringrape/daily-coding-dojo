@@ -42,7 +42,6 @@ mkdir javascript
 cd javascript
 npm init -y
 npm i jest @types/jest eslint
-echo node_modules > .gitignore
 $jsonfile = './package.json'
 $json = Get-Content $jsonfile | Out-String | ConvertFrom-Json
 $json.scripts | Add-Member -Type NoteProperty -Name test -Value jest -Force
