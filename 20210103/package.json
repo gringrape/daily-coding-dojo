@@ -1,0 +1,17 @@
+{
+  "name": "20210103",
+  "version": "1.0.0",
+  "description": "코딩 도장 만들기\r ## 목표\r - [ ] 오늘 날짜의 코딩 도장 폴더\r - [ ] 프로젝트 시작\r - [ ] Jest, type 설치\r - [ ] package.json 테스트 옵션 추가\r - [ ] Jest watch\r - [ ] eslint 설치 \r - [ ] eslint 옵션 추가 \r - [ ] 패키지 배포",
+  "main": "index.js",
+  "dependencies": {
+    "@types/jest": "^26.0.19",
+    "jest": "^26.6.3"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
