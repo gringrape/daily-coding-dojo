@@ -1,6 +1,7 @@
 function isPalindrome(text) {
   const middleIndex = Math.floor(text.length / 2);
-  return [...Array(middleIndex).keys()]
+  return Array(middleIndex).fill()
+    .map((_, idx) => idx)
     .every((idx) => text[idx] === text[text.length - 1 - idx]);
 }
 
