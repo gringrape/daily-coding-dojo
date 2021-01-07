@@ -1,8 +1,25 @@
+/* eslint-disable no-restricted-syntax */
+function* generateNumbers({ from, to }) {
+  if (from > to) {
+    return;
+  }
+
+  yield from;
+  yield* generateNumbers({ from: from + 1, to });
+}
+
 function isPalindrome(text) {
   const middleIndex = Math.floor(text.length / 2);
-  return Array(middleIndex).fill()
-    .map((_, index) => index)
-    .every((index) => text[index] === text[text.length - 1 - index]);
+
+  const iterator = generateNumbers({ from: 0, to: middleIndex + 1 });
+
+  for (const i of iterator) {
+    if (text[i] !== text[text.length - 1 - i]) {
+      return false;
+    }
+  }
+
+  return true;
 }
 
 test('true', () => {
