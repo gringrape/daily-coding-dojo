@@ -10,20 +10,18 @@ describe('Node', () => {
     expect(new Node(3).value).toBe(3);
   });
 
-  describe('next', () => {
-    it('next null initially', () => {
-      const current = new Node(3);
+  test('next, null', () => {
+    const current = new Node(3);
 
-      expect(current.next).toBeNull();
-    });
+    expect(current.next).toBeNull();
+  });
 
-    it('returns given next', () => {
-      const current = new Node(3);
+  test('next, given value', () => {
+    const current = new Node(3);
 
-      current.next = new Node(5);
+    current.next = new Node(5);
 
-      expect(current.next.value).toBe(5);
-    });
+    expect(current.next.value).toBe(5);
   });
 });
 
