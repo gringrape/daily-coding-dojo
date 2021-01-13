@@ -36,3 +36,24 @@ describe('Singly Linked List', () => {
     expect(head.next.value).toBe(2);
   });
 });
+
+function getMiddle(array) {
+  const go = (walker, runner) => {
+    if (!runner?.next) {
+      return walker.value;
+    }
+    return go(walker.next, runner.next.next);
+  };
+
+  const { head } = new SinglyLinkedList(...array);
+
+  return go(head, head.next);
+}
+
+test('getMiddle', () => {
+  expect(getMiddle([1])).toBe(1);
+  expect(getMiddle([1, 2])).toBe(1);
+  expect(getMiddle([1, 2, 3])).toBe(2);
+  expect(getMiddle([1, 2, 3, 4])).toBe(2);
+  expect(getMiddle([1, 2, 3, 4, 5])).toBe(3);
+});
