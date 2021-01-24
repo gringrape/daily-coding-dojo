@@ -49,3 +49,13 @@ $json | ConvertTo-Json | Set-Content $jsonfile
 echo '#풀어보자' > README.md 
 npx eslint --init
 ```
+### scala
+```
+$date = Get-Date -Format "yyyyMMdd"
+mkdir $date
+cd $date
+mkdir scala
+cd scala
+sbt new scala/hello-world.g8
+-> sbt, ~run
+
