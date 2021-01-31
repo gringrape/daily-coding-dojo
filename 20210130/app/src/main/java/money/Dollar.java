@@ -1,18 +1,11 @@
 package money;
 
-public class Dollar {
-    public double amount;
-
+public class Dollar extends Money {
     public Dollar(double amount) {
-        this.amount = amount;
+        super(amount, "USD");
     }
 
-    public void times(int factor) {
-        amount *= factor;
-    }
-
-    @Override
-    public boolean equals(Object other) {
-        return true;
+    public static Dollar of(double amount) {
+        return new Dollar(amount);
     }
 }
