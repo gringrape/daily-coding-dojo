@@ -1,6 +1,6 @@
 package money;
 
-public abstract class Money {
+public class Money {
     protected double amount;
     protected String currency;
 
@@ -9,28 +9,24 @@ public abstract class Money {
         this.currency = currency;
     }
 
+    public static Money of(double amount, String currency) {
+        return new Money(amount, currency);
+    }
+
+    public static Money dollar(double amount) {
+        return new Money(amount, "USD");
+    }
+
+    public static Money franc(double amount) {
+        return new Money(amount, "CHF");
+    }
+
     public Money times(int factor) {
-        if (currency.equals("USD")) {
-            return new Dollar(amount * factor);
-        }
-
-        if (currency.equals("CHF")) {
-            return new Franc(amount * factor);
-        }
-
-        return null;
+        return new Money(amount * factor, currency);
     }
 
     public Money plus(Money other) {
-        if (currency.equals("USD")) {
-            return new Dollar(amount + other.amount);
-        }
-
-        if (currency.equals("CHF")) {
-            return new Franc(amount + other.amount);
-        }
-
-        return null;
+        return new Money(amount + other.amount, currency);
     }
 
     @Override
