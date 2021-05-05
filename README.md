@@ -1,61 +1,41 @@
 # Daily Coding Dojo
-매일 코딩 도장이 열립니다.
+매일 테스트 주도 개발을 수련합시다.
 
 ## 수련방법
 ```
 해당날짜의 디렉토리를 만듭니다.
 사용하고 싶은 언어로 환경설정 합니다.
-풀고자하는 하는 문제를 README.md 에 적습니다.
-열심히 코딩하고 커밋합니다.
-반성을 적고 커밋합니다.
+문제를 고릅니다. 
+풀고자하는 하는 문제의 정보를 README.md 에 적습니다.
 ```
 
 ### README 템플릿
 
-수련에 익숙해질때까지 템플릿에 따라서 충실하게 작성하도록 합니다.
-
 ```
 문제제목
-1. 구하는 것은 무엇인가
-2. 주어진 것은 무엇인가
-3. 조건은 무엇인가
-4. 계획은 무엇인가
-5. (풀고난후) 회고와 개선계획
+링크
+1. 구하는 것
+2. 주어진 것
+3. 조건
 ```
 
-## 수련장 설정
-### Javascript - windows powershell
+## scala
+### new project
 ```
-$date = Get-Date -Format "yyyyMMdd"
-mkdir $date
-cd $date
-npm init -y
-npm i jest @types/jest
-echo node_modules > .gitignore
+sbt new scala/scalatest-example.g8
 ```
-### Javascript - powershell + test script 'jest' 추가
+### lint
+project/plugins.sbt
 ```
-$date = Get-Date -Format "yyyyMMdd"
-mkdir $date
-cd $date
-mkdir javascript
-cd javascript
-npm init -y
-npm i jest @types/jest eslint
-$jsonfile = './package.json'
-$json = Get-Content $jsonfile | Out-String | ConvertFrom-Json
-$json.scripts | Add-Member -Type NoteProperty -Name test -Value jest -Force
-$json | ConvertTo-Json | Set-Content $jsonfile
-echo '#풀어보자' > README.md 
-npx eslint --init
+addSbtPlugin("ch.epfl.scala" % "sbt-scalafix" % "0.9.8")
 ```
-### scala
+build.sbt
 ```
-$date = Get-Date -Format "yyyyMMdd"
-mkdir $date
-cd $date
-mkdir scala
-cd scala
-sbt new scala/hello-world.g8
--> sbt, ~run
-
+scalafixDependencies in ThisBuild += "org.scalalint" %% "rules" % "0.1.4"
+```
+### run test
+project root
+```
+sbt
+~test
+```
