@@ -4,10 +4,52 @@
 package com.gringrape.codelife;
 
 import org.junit.jupiter.api.Test;
+
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class AppTest {
+   public String solution(String[] participant, String[] completion) {
+       return Arrays.stream(participant)
+               .filter(name -> Arrays.stream(completion)
+                       .noneMatch(complete -> countName(participant, name) == countName(completion, name)))
+               .distinct()
+               .collect(Collectors.joining());
+   }
+
+    public int countName(String[] list, String name) {
+       return (int) Arrays.stream(list)
+               .filter(nameOnList -> nameOnList.equals(name))
+               .count();
+    }
+
     @Test void simpleTest() {
-        assertEquals(1 + 1, 2);
+        assertEquals(solution(
+                new String[]{"leo", "kiki"},
+                new String[]{"leo"}
+        ), "kiki");
+    }
+
+    @Test void manyParticipants() {
+        assertEquals(solution(
+                new String[]{"leo", "kiki", "chichi", "shushu", "nana", "ella"},
+                new String[]{"leo", "kiki", "chichi", "shushu", "nana"}
+        ), "ella");
+    }
+
+    @Test void duplicateNames() {
+        assertEquals(solution(
+                new String[]{"leo", "kiki", "kiki"},
+                new String[]{"leo", "kiki"}
+        ), "kiki");
+    }
+
+    @Test void countNamesOnANameList() {
+       assertEquals(countName(
+               new String[]{"leo", "leo", "kiki"},
+               "leo"
+       ), 2);
     }
 }
