@@ -6,23 +6,17 @@ package com.gringrape.codelife;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
-import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class AppTest {
-   public String solution(String[] participant, String[] completion) {
-       return Arrays.stream(participant)
-               .filter(name -> Arrays.stream(completion)
-                       .noneMatch(complete -> countName(participant, name) == countName(completion, name)))
-               .distinct()
-               .collect(Collectors.joining());
-   }
+    public String solution(String[] participant, String[] completion) {
+        Arrays.sort(participant);
+        Arrays.sort(completion);
 
-    public int countName(String[] list, String name) {
-       return (int) Arrays.stream(list)
-               .filter(nameOnList -> nameOnList.equals(name))
-               .count();
+        int index = Arrays.mismatch(participant, completion);
+
+        return participant[index];
     }
 
     @Test void simpleTest() {
@@ -44,12 +38,5 @@ class AppTest {
                 new String[]{"leo", "kiki", "kiki"},
                 new String[]{"leo", "kiki"}
         ), "kiki");
-    }
-
-    @Test void countNamesOnANameList() {
-       assertEquals(countName(
-               new String[]{"leo", "leo", "kiki"},
-               "leo"
-       ), 2);
     }
 }
