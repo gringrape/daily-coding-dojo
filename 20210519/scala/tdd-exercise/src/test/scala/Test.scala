@@ -1,4 +1,5 @@
 import org.scalatest.funsuite.AnyFunSuite;
+import scala.annotation.tailrec
 
 class Test extends AnyFunSuite {
   def solution(left: Int, right: Int): Int = {
@@ -8,10 +9,17 @@ class Test extends AnyFunSuite {
 
     def sign(n: Int) = if (hasOddDivisors(n)) -1 else +1
 
-    Range
-      .inclusive(left, right, 1)
-      .map(n => sign(n) * n)
-      .sum
+    @tailrec
+    def go(start: Int, end: Int, sum: Int = 0): Int = {
+      if (start > end) sum
+      else
+        go(
+          start + 1,
+          end,
+          sum + sign(start) * start
+        )
+    }
+    go(left, right, 0)
   }
 
   test("test is working") {
