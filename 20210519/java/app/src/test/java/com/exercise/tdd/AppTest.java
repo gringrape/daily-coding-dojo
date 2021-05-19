@@ -5,11 +5,28 @@ package com.exercise.tdd;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.stream.IntStream;
+
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 class AppTest {
-    @Test void testIsWorking() {
-        assertThat(1 + 1).isEqualTo(2);
+    int sign(int n) {
+        double sqrt = Math.sqrt(n);
+        boolean isSquareRoot = Math.floor(sqrt) == sqrt;
+
+        return isSquareRoot ? -1 : +1;
+    }
+
+    int solution(int left, int right) {
+        return IntStream.rangeClosed(left, right)
+                    .map(i -> sign(i) * i)
+                    .sum();
+    }
+
+    @Test void simple() {
+        assertThat(solution(1, 1)).isEqualTo(-1);
+        assertThat(solution(1, 2)).isEqualTo(1);
+        assertThat(solution(1, 4)).isEqualTo(0);
+        assertThat(solution(4, 5)).isEqualTo(1);
     }
 }
