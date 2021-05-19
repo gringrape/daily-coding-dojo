@@ -1,27 +1,36 @@
-function countDivisors(number) {
-  return Array(number).fill()
-    .filter((_, i) => number % (i + 1) === 0)
-    .length;
+function hasOddDevisors(number) {
+  return Number.isInteger(
+    Math.sqrt(number),
+  );
 }
 
-test('countDivisors', () => {
-  expect(countDivisors(1)).toBe(1);
-  expect(countDivisors(2)).toBe(2);
-  expect(countDivisors(3)).toBe(2);
+test('hasOddDevisors', () => {
+  expect(hasOddDevisors(1)).toBe(true);
+  expect(hasOddDevisors(4)).toBe(true);
+  expect(hasOddDevisors(9)).toBe(true);
+
+  expect(hasOddDevisors(2)).toBe(false);
+  expect(hasOddDevisors(6)).toBe(false);
+  expect(hasOddDevisors(8)).toBe(false);
 });
 
-function solution(left, right, accumulator = 0) {
-  if (left > right) {
-    return accumulator;
+function solution(left, right) {
+  function sumInRange(start, end, sum) {
+    if (start > end) {
+      return sum;
+    }
+
+    const sign = hasOddDevisors(start) ? -1 : +1;
+    const increment = sign * start;
+
+    return sumInRange(
+      start + 1,
+      end,
+      sum + increment,
+    );
   }
 
-  const increment = ((-1) ** countDivisors(left)) * left;
-
-  return solution(
-    left + 1,
-    right,
-    accumulator + increment,
-  );
+  return sumInRange(left, right, 0);
 }
 
 test('test environment has no problem', () => {
