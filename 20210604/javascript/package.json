@@ -1,0 +1,26 @@
+{
+  "name": "javascript",
+  "version": "1.0.0",
+  "description": "https://programmers.co.kr/learn/courses/30/lessons/12973 ## 구하는 것 짝지어 제거하기를 성공적으로 수행할 수 있는지 여부. 가능하면 1 가능하지 않으면 0 ## 주어진 것 알파벳 소문자로 이루어진 문자열.",
+  "main": "index.js",
+  "jest": {
+    "setupFiles": [
+      "jest-plugin-context/setup"
+    ]
+  },
+  "scripts": {
+    "test": "jest",
+    "watch": "npm test -- --watchAll"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/jest": "^26.0.23",
+    "eslint": "^7.27.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-plugin-import": "^2.23.4",
+    "jest": "^27.0.4",
+    "jest-plugin-context": "^2.9.0"
+  }
+}
