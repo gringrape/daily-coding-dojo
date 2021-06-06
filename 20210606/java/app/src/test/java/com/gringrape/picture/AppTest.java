@@ -4,10 +4,97 @@
 package com.gringrape.picture;
 
 import org.junit.jupiter.api.Test;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.function.BiFunction;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class AppTest {
-    @Test void simpleTest() {
+    public <T> List<List<T>> permute(T[] nums) {
+        List<List<T>> result = new ArrayList<>();
+        helper(0, nums, result);
+        return result;
+    }
+
+    private <T> void helper(int start, T[] nums, List<List<T>> result) {
+        if (start == nums.length - 1) {
+            ArrayList<T> list = new ArrayList<>();
+            for (T num : nums) {
+                list.add(num);
+            }
+            result.add(list);
+            return;
+        }
+
+        for (int i = start; i < nums.length; i++) {
+            swap(nums, i, start);
+            helper(start + 1, nums, result);
+            swap(nums, i, start);
+        }
+    }
+
+    private <T> void swap(T[] nums, int i, int j) {
+        T temp = nums[i];
+        nums[i] = nums[j];
+        nums[j] = temp;
+    }
+
+    @Test
+    void simpleTest() {
         assertEquals(1 + 1, 2);
+    }
+
+    @Test
+    void permutation() {
+        assertEquals(
+                permute(new Integer[]{1, 2, 3}),
+                List.of(
+                        List.of(1, 2, 3),
+                        List.of(1, 3, 2),
+                        List.of(2, 1, 3),
+                        List.of(2, 3, 1),
+                        List.of(3, 2, 1),
+                        List.of(3, 1, 2)
+                )
+        );
+    }
+
+    public int solution(int n, String[] conditions) {
+        Map<Character, BiFunction<Integer, Integer, Boolean>> operations = new HashMap<>();
+        operations.put('=', (Integer a, Integer b) -> a == b);
+        operations.put('>', (Integer a, Integer b) -> a > b);
+        operations.put('<', (Integer a, Integer b) -> a < b);
+
+        var allCases = permute(new Character[]{'A', 'C', 'F', 'J', 'M', 'N', 'R', 'T'}).stream();
+
+        for (String condition: conditions) {
+            allCases = allCases.filter(l -> {
+                var chars = condition.toCharArray();
+
+                var A = chars[0];
+                var B = chars[2];
+                var operation = operations.get(chars[3]);
+                var distance = Integer.parseInt(Character.toString(
+                        chars[4]), 10
+                );
+
+                var difference = Math.abs(l.indexOf(A) - l.indexOf(B));
+                return operation.apply(difference, distance + 1);
+            });
+        }
+
+        return allCases.toArray().length;
+    }
+
+    @Test
+    void example() {
+        assertEquals(
+                solution(2, new String[]{"N~F=0", "R~T>2"}),
+                3648
+        );
     }
 }
