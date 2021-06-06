@@ -5,10 +5,94 @@ package com.gringrape.coloringbook;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.stream.Stream;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 class AppTest {
     @Test void testIsWorking() {
         assertThat(1 + 1).isEqualTo(2);
+    }
+
+    int size(int x, int y, int[][] picture, int m, int n, int color) {
+        var outOfBoundary = x < 0 || x >= m || y < 0 || y >= n;
+        if (outOfBoundary) {
+            return 0;
+        }
+
+        var notADrawing = picture[x][y] == 0;
+        var alreadyVisited = picture[x][y] == -1;
+        var notSameColor = picture[x][y] != color;
+        if (notADrawing || alreadyVisited || notSameColor) {
+            return 0;
+        }
+
+        picture[x][y] = -1;
+
+        return 1 + (
+                size(x - 1, y, picture, m, n, color)
+                + size(x + 1, y, picture, m, n, color)
+                + size(x, y - 1, picture, m, n, color)
+                + size(x, y + 1, picture, m, n, color)
+        );
+    }
+
+    @Test void sizeOfAnArea() {
+        int[][] picture = new int[][]{
+                new int[]{1, 1},
+                new int[]{1, 0}
+        };
+        assertThat(size(0, 0, picture, 2, 2,1)).isEqualTo(3);
+
+        int[][] picture2 = new int[][]{
+                new int[]{1, 1, 1},
+                new int[]{1, 0, 0}
+        };
+        assertThat(size(0, 0, picture2, 2, 3, 1)).isEqualTo(4);
+        assertThat(size(1, 1, picture2, 2, 3, 0)).isEqualTo(0);
+    }
+
+    @Test void sizeOfAnAreaWithDifferentColors() {
+        int[][] picture = new int[][]{
+                new int[]{1, 1},
+                new int[]{1, 2}
+        };
+        assertThat(size(0, 0, picture, 2, 2, 1)).isEqualTo(3);
+    }
+
+    int[] solution(int m, int n, int[][] picture) {
+        var areas = Stream.iterate(0, i -> i + 1).limit(m).flatMap(i ->
+                Stream.iterate(0, j -> j + 1).limit(n).map(j -> size(i, j, picture, m, n, picture[i][j]))
+        )
+                .filter(size -> size != 0)
+                .toList();
+
+        return new int[]{
+                areas.size(),
+                Collections.max(areas)
+        };
+    }
+
+    @Test void example() {
+        assertThat(solution(6, 4, new int[][]{
+                new int[]{1, 1, 1, 0},
+                new int[]{1, 2, 2, 0},
+                new int[]{1, 0, 0, 1},
+                new int[]{0, 0, 0, 1},
+                new int[]{0, 0, 0, 3},
+                new int[]{0, 0, 0, 3},
+        })).isEqualTo(
+                new int[]{4, 5}
+        );
+
+        assertThat(solution(3, 3, new int[][]{
+                new int[]{0, 1, 0},
+                new int[]{1, 1, 0},
+                new int[]{0, 0, 0},
+        })).isEqualTo(
+                new int[]{1, 3}
+        );
     }
 }
