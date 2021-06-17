@@ -2,15 +2,9 @@ test('test is working', () => {
   expect(1 + 1).toBe(2);
 });
 
-function rankOf(count) {
-  if (count < 2) {
-    return 6;
-  }
-
-  return 7 - count;
-}
-
 function solution(lottos, winNums) {
+  const rankOf = (count) => (count < 2 ? 6 : 7 - count);
+
   const winCount = lottos.filter((n) => winNums.includes(n)).length;
   const zeroCount = lottos.filter((n) => n === 0).length;
 
