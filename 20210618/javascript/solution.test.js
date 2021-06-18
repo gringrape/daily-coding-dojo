@@ -13,7 +13,7 @@ function solution(newId) {
     .replace(/\.$/, '');
 
   return result
-    .padEnd(3, result[result.length - 1]);
+    .padEnd(3, result.slice(-1));
 }
 
 test('solution', () => {
