@@ -37,7 +37,8 @@ function match(userId, bannedId) {
       .every((c, i) => c === '*' || c === user[i]);
   };
 
-  return bannedId.map((bannedUser) => userId.filter((user) => isMatched(bannedUser, user)));
+  return bannedId
+    .map((bannedUser) => userId.filter((user) => isMatched(bannedUser, user)));
 }
 
 function solution(userId, bannedId) {
