@@ -6,9 +6,7 @@ function solution(nums) {
   const kinds = (new Set(nums)).size;
   const N = nums.length;
 
-  return kinds >= N / 2
-    ? N / 2
-    : kinds;
+  return Math.min(kinds, N / 2);
 }
 
 test('samples', () => {
