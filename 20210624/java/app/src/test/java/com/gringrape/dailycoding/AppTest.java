@@ -4,11 +4,22 @@
 package com.gringrape.dailycoding;
 
 import org.junit.jupiter.api.Test;
+
+import java.util.stream.IntStream;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class AppTest {
-    @Test void appHasAGreeting() {
-        App classUnderTest = new App();
-        assertNotNull(classUnderTest.getGreeting(), "app should have a greeting");
+    @Test void testWorks() {
+        assertEquals(1 + 1, 2);
+    }
+
+    int solution(int n) {
+        return IntStream.iterate(0, i -> i + 1)
+                .reduce;
+    }
+
+    @Test void samples() {
+        assertEquals(solution(6), 8);
     }
 }
