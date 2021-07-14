@@ -4,10 +4,194 @@
 package com.gringrape.codinglife;
 
 import org.junit.jupiter.api.Test;
+
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class AppTest {
     @Test void testIsWorking() {
         assertEquals(1 + 1, 2);
+    }
+
+    List<List<List<Integer>>> paths(int n, List<Integer> point1, List<Integer> point2) {
+        OptionalInt optionalAxis = IntStream.range(0, 2)
+                .filter(i -> point1.get(i).equals(point2.get(i)))
+                .findFirst();
+
+        if (optionalAxis.isPresent()) {
+            int axis = 1 - optionalAxis.getAsInt();
+
+            int from = point1.get(axis);
+            int to = point2.get(axis);
+
+            Function<Integer, List<Integer>> integerListFunction = i -> axis == 0 ? List.of(i, point1.get(1 - axis)) : List.of(point1.get(1 - axis), i);
+
+            List<List<Integer>> path1 = IntStream.range(from + 1, to)
+                    .boxed()
+                    .map(integerListFunction)
+                    .collect(Collectors.toList());
+
+            return List.of(path1);
+        }
+
+        // 두개의 좌표 축이 모두 다른 경우. -> path1: column 값 먼저 증가. path2: row 값 먼저 증가
+        int xFrom = point1.get(0);
+        int yFrom = Math.min(point1.get(1), point2.get(1));
+
+        int xTo = point2.get(0);
+        int yTo = Math.max(point1.get(1), point2.get(1));
+
+        List<List<Integer>> path1Parallel = IntStream.range(yFrom + 1, yTo + 1)
+                .boxed().map(i -> List.of(xFrom, i)).collect(Collectors.toList());
+        List<List<Integer>> path1Vertical = IntStream.range(xFrom + 1, xTo)
+                .boxed().map(i -> List.of(i, yTo)).collect(Collectors.toList());
+
+        List<List<Integer>> path1 = new ArrayList<>();
+        path1.addAll(path1Parallel);
+        path1.addAll(path1Vertical);
+
+        List<List<Integer>> path2Vertical = IntStream.range(xFrom + 1, xTo)
+                .boxed().map(i -> List.of(i, yFrom)).collect(Collectors.toList());
+        List<List<Integer>> path2Parallel = IntStream.range(yFrom, yTo)
+                .boxed().map(i -> List.of(xTo, i)).collect(Collectors.toList());
+
+        List<List<Integer>> path2 = new ArrayList<>();
+        path2.addAll(path2Vertical);
+        path2.addAll(path2Parallel);
+
+        if (point1.get(1) > point2.get(1)) {
+            List<List<Integer>> path1Reversed = path1.stream().map(point -> List.of(point.get(0), point1.get(1) + point2.get(1) - point.get(1))).collect(Collectors.toList());
+            List<List<Integer>> path2Reversed = path2.stream().map(point -> List.of(point.get(0), point1.get(1) + point2.get(1) - point.get(1))).collect(Collectors.toList());
+
+            return List.of(path1Reversed, path2Reversed);
+        }
+
+        return List.of(path1, path2);
+    }
+
+    @Test void testPathsWithSameAxis() {
+        assertEquals(
+                paths(3, List.of(0, 0), List.of(0, 3)),
+                List.of(List.of(List.of(0, 1), List.of(0, 2)))
+        );
+
+        assertEquals(
+                paths(3, List.of(0, 0), List.of(3, 0)),
+                List.of(List.of(List.of(1, 0), List.of(2, 0)))
+        );
+
+        assertEquals(
+                paths(2, List.of(0, 1), List.of(1, 0)),
+                List.of(List.of(List.of(0, 0)), List.of(List.of(1, 1)))
+        );
+    }
+
+    @Test void testPathsWithDifferentAxis() {
+        assertEquals(
+                paths(3, List.of(0, 0), List.of(2, 2)),
+                List.of(
+                        List.of(List.of(0, 1), List.of(0, 2), List.of(1, 2)),
+                        List.of(List.of(1, 0), List.of(2, 0), List.of(2, 1))
+                )
+        );
+    }
+
+    boolean deletable(String[] board, Set<Character> remains, List<Integer> tile1, List<Integer> tile2) {
+      return paths(board[0].length(), tile1, tile2).stream().anyMatch(
+              path -> path.stream().allMatch(point -> {
+                   int x = point.get(0);
+                  int y = point.get(1);
+                  char tile = board[x].charAt(y);
+                  return tile != '*' && (tile == '.' || !remains.contains(tile));
+              })
+      );
+    }
+
+    @Test
+    void testDeletable() {
+        assertEquals(deletable(new String[]{"AB", "BA"}, Set.of('A', 'B'), List.of(0, 1), List.of(1, 0)), false);
+        assertEquals(deletable(new String[]{"..A", "...", "A.."}, Set.of('A'), List.of(0, 2), List.of(2, 0)), true);
+    }
+
+    String go(
+            Set<Character> remains,
+            String result,
+            Map<Character, List<Integer>> positions,
+            String[] board
+    ) {
+        System.out.println(remains);
+        if (remains.size() == 0) {
+            return result;
+        }
+
+        for (char tile : remains.stream().sorted().collect(Collectors.toList())) {
+            List<Integer> points = positions.get(tile);
+            if (deletable(board, remains, List.of(points.get(0), points.get(1)),List.of(points.get(2), points.get(3)))) {
+                Set<Character> nextSet = new HashSet<>(remains);
+                nextSet.remove(tile);
+                return go(
+                        nextSet,
+                        result + tile,
+                        positions,
+                        board
+                );
+            }
+        }
+
+        return null;
+    }
+
+    String solution(int m, int n, String[] board) {
+        List<String> results = new ArrayList<>();
+
+        // 특정 타일의 위치를 기록하자!
+        Map<Character, List<Integer>> positions = new HashMap<>();
+
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                char tile = board[i].charAt(j);
+
+                if (tile < 65 || tile > 90) {
+                    continue;
+                }
+
+                if (!positions.containsKey(tile)) {
+                    List<Integer> position = new ArrayList<>(List.of(i, j));
+                    positions.put(tile, position);
+                    continue;
+                }
+                positions.get(tile).addAll(List.of(i, j));
+            }
+        }
+
+        String result = go(positions.keySet(), "", positions, board);
+
+        if (result == null) {
+            return "IMPOSSIBLE";
+        }
+
+        return result;
+    }
+
+    @Test void testSolution() {
+        assertEquals(
+                solution(3, 3, new String[]{"DBA", "C*A", "CDB"}), "ABCD"
+        );
+
+        assertEquals(
+                solution(4, 4, new String[]{".ZI.", "M.**", "MZU.", ".IU."}), "MUZI"
+        );
+
+        assertEquals(
+                solution(2, 2, new String[]{"AB", "BA"}), "IMPOSSIBLE"
+        );
+
+        assertEquals(
+                solution(5, 5, new String[]{ "FGHEI", "BAB..", "D.C*.", "CA..I", "DFHGE" }), "ABCDFHGIE"
+        );
     }
 }
