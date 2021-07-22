@@ -12,106 +12,85 @@ import java.util.stream.IntStream;
 import static org.junit.jupiter.api.Assertions.*;
 
 class AppTest {
-    class Entry {
-        Integer vertex;
-        List<Integer> path;
-
-        Entry(Integer vertex, List<Integer> path) {
-            this.vertex = vertex;
-            this.path = path;
-        }
-    }
-
-    Map<Integer, List<Integer>> connect(int[][] edges) {
+    Map<Integer, List<Integer>> connect(int n, int[][] edges) {
         Map<Integer, List<Integer>> network = new HashMap<>();
+
+        IntStream.range(1, n + 1).forEach(i -> {
+           network.put(i, new ArrayList<>());
+        });
 
         Arrays.stream(edges).forEach(edge -> {
             int vertex1 = edge[0];
             int vertex2 = edge[1];
 
-            network.putIfAbsent(vertex1, new ArrayList<>());
-            network.putIfAbsent(vertex2, new ArrayList<>());
-
             network.get(vertex1).add(vertex2);
             network.get(vertex2).add(vertex1);
         });
+
+        network.forEach((k, v)-> v.add(k));
 
         return network;
     }
 
     @Test void testNetwork() {
-        Map<Integer, List<Integer>> network = connect(sampleEdges);
+        Map<Integer, List<Integer>> network = connect(7, sampleEdges);
 
         assertTrue(network.get(1).contains(2));
     }
 
-    List<List<Integer>> traverse(int start, int end, int distance, Map<Integer, List<Integer>> network) {
-        List<Entry> queue = new ArrayList<>();
-        List<Integer> initialPath = new ArrayList<>();
-        initialPath.add(start);
-
-        Entry firstEntry = new Entry(start, initialPath);
-
-        queue.add(firstEntry);
-
-        List<List<Integer>> result = new ArrayList<>();
-
-        while (true) {
-            Entry entry = queue.remove(0);
-            Integer vertex = entry.vertex;
-            List<Integer> path = entry.path;
-
-            if (path.size() > distance) {
-                break;
-            }
-
-            if (path.size() == distance && vertex == end) {
-                result.add(path);
-            }
-
-            List<Integer> neighbors = network.get(vertex);
-            List<Entry> neighborEntries = neighbors.stream().map(neighbor -> {
-                List<Integer> newPath = new ArrayList<>(path);
-                newPath.add(neighbor);
-                return new Entry(neighbor, newPath);
-            }).collect(Collectors.toList());
-
-            queue.addAll(neighborEntries);
-        }
-
-        return result;
-    }
-
-    @Test void testTraverse() {
-        assertTrue(
-                traverse(1, 7, 6, connect(sampleEdges))
-                    .contains(List.of(1, 2, 3, 4, 6, 7))
-        );
+    void printArray(int[][] array) {
+        IntStream.range(0, array.length).forEach(i -> {
+            System.out.println(Arrays.toString(array[i]));
+        });
     }
 
     int solution(int n, int m, int[][] edge_list, int k, int[] gps_log) {
-        Map<Integer, List<Integer>> network = connect(edge_list);
+        // 1. dp 테이블 그리기
+        // - 행의 길이는 주어진 경로(gps_log)의 노드 개수
+        // - 열의 길이는 노드 개수
+        int pathLength = gps_log.length;
+
+        int[][] mismatches = new int[pathLength][n];
+
+        IntStream.range(0, pathLength).forEach(i -> {
+            IntStream.range(0, n).forEach(j -> {
+                mismatches[i][j] = 987654321;
+            });
+        });
+
+        int last = gps_log[pathLength - 1];
+        mismatches[0][last - 1] = 0;
+
+        // 2. 테이블 순회 점화식 세우기
+        Map<Integer, List<Integer>> network = connect(n, edge_list);
+        IntStream.range(1, pathLength).forEach(i -> {
+            IntStream.range(0, n).forEach(j -> {
+                int node = j + 1;
+                int pathNode = gps_log[pathLength - i - 1];
+                // 현재 mismatch 값
+                int currentMismatch = node == pathNode ? 0 : 1;
+                // 이전 mismatch 의 최소값
+                List<Integer> neighbors = network.get(node);
+                Optional<Integer> min = neighbors.stream()
+                        .map(neighbor -> mismatches[i - 1][neighbor - 1])
+                        .min(Comparator.comparingInt(a -> a));
+
+                min.ifPresent(integer -> mismatches[i][j] = integer + currentMismatch);
+            });
+        });
+
+        printArray(mismatches);
+
+        // 3. 테이블을 모두 순회해서 정답 반환하기
+
         int start = gps_log[0];
-        int end = gps_log[gps_log.length - 1];
+        int result = mismatches[pathLength - 1][start - 1];
 
-        List<List<Integer>> paths = traverse(start, end, gps_log.length, network);
-
-        // case 1. 애초에 그런 경로가 존재하지 않는다면 수정할 수 없다.
-        if (paths.size() == 0) {
+        if (result > pathLength - 2) {
             return -1;
         }
 
-        // case 2. 올바른 경로들 중에 원래 경로가 포함되어 있다면 고칠 필요가 없다.
-        List<Integer> givenPath = Arrays.stream(gps_log).boxed().collect(Collectors.toList());
-        if (paths.contains(givenPath)) {
-            return 0;
-        }
-
-        Long first = paths.stream().map(path -> IntStream.range(0, path.size())
-                .filter(i -> !path.get(i).equals(givenPath.get(i)))
-                .count()).sorted().findFirst().get();
-
-        return first.intValue();
+        return result;
     }
 
     @Test void testSample() {
@@ -124,10 +103,16 @@ class AppTest {
                 solution(7, 10, sampleEdges, 6, sampleLogs2),
                 0
         );
+
+        assertEquals(
+                solution(7, 10, sampleEdges, 6, sampleLogs3),
+                0
+        );
     }
 
     final int[] sampleLogs = new int[]{1, 2, 3, 3, 6, 7};
     final int[] sampleLogs2 = new int[]{1, 2, 4, 6, 5, 7};
+    final int[] sampleLogs3 = new int[]{1, 1, 1, 1, 1, 7};
 
     final int[][] sampleEdges = new int[][]{
             new int[]{1, 2},
