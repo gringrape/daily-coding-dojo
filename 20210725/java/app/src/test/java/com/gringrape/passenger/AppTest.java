@@ -4,10 +4,90 @@
 package com.gringrape.passenger;
 
 import org.junit.jupiter.api.Test;
+
+import java.util.Arrays;
+import java.util.stream.IntStream;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class AppTest {
-    @Test void testWorks() {
-        assertEquals(1 + 1, 2);
+    int nearWays(int i, int j, int m, int n, int[][] city_map, String direction, int[][] ways) {
+        if (i < 0 || i >= m || j < 0 || j >= n) {
+            return 0;
+        }
+
+        if (city_map[i][j] == 1) {
+            return 0;
+        }
+
+        if (city_map[i][j] == 2 && direction.equals("right")) {
+            return nearWays(i, j - 1, m, n, city_map, "right", ways);
+        }
+
+        if (city_map[i][j] == 2 && direction.equals("down")) {
+            return nearWays(i - 1, j, m, n, city_map, "down", ways);
+        }
+
+        return ways[i][j];
+    }
+
+    int solution(int m, int n, int[][] city_map) {
+        int[][] ways = new int[m][n];
+
+        ways[0][0] = 1;
+
+        IntStream.range(0, m).forEach(i -> {
+            IntStream.range(0, n).forEach(j -> {
+                if (i == 0 && j == 0) {
+                    return;
+                }
+                ways[i][j] = nearWays(i - 1, j, m, n, city_map, "down", ways)
+                        + nearWays(i, j - 1, m, n, city_map, "right", ways);
+            });
+        });
+
+        for (int[] way : ways) {
+            System.out.println(Arrays.toString(way));
+        }
+
+        return ways[m - 1][n - 1];
+    }
+
+    @Test void testSimple() {
+        assertEquals(solution(
+                2, 2,
+                new int[][]{
+                        new int[]{0, 0},
+                        new int[]{0, 0}
+                }
+        ), 2);
+
+        assertEquals(solution(
+                2, 2,
+                new int[][]{
+                        new int[]{0, 1},
+                        new int[]{0, 0}
+                }
+        ), 1);
+
+        assertEquals(solution(
+                3, 3,
+                new int[][]{
+                        new int[]{0, 0, 0},
+                        new int[]{0, 1, 0},
+                        new int[]{0, 0, 0}
+                }
+        ), 2);
+    }
+
+    @Test void testSample() {
+        assertEquals(solution(
+                3, 6,
+                new int[][]{
+                        new int[]{0, 2, 0, 0, 0, 2},
+                        new int[]{0, 0, 2, 0, 1, 0},
+                        new int[]{1, 0, 0, 2, 2, 0}
+                }
+        ), 2);
     }
 }
