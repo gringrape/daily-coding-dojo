@@ -5,11 +5,59 @@ package com.gringrape.tddexercise;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import java.util.stream.IntStream;
+
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 
 class AppTest {
+    void check(int[][] arr, int minR, int maxR, int minC, int maxC, int[] result) {
+        int first = arr[minR][minC];
+
+        boolean compressible = IntStream.range(minR, maxR)
+                .allMatch(r -> IntStream.range(minC, maxC).allMatch(c -> arr[r][c] == first));
+
+        if (compressible) {
+            result[first] += 1;
+            return;
+        }
+
+        int halfRow = (maxR - minR) / 2 + minR;
+        int halfColumn = (maxC - minC) / 2 + minC;
+
+        check(arr, minR, halfRow, minC, halfColumn, result);
+        check(arr, halfRow, maxR, minC, halfColumn, result);
+        check(arr, minR, halfRow, halfColumn, maxC, result);
+        check(arr, halfRow, maxR, halfColumn, maxC, result);
+    }
+
+    int[] solution(int[][] arr) {
+        int[] result = new int[]{0, 0};
+
+        check(arr, 0, arr.length, 0, arr[0].length, result);
+
+        return result;
+    }
+
     @Test
-    void testWorks() {
-        assertEquals(1 + 1, 2);
+    void testSimple() {
+        assertArrayEquals(solution(new int[][]{
+                new int[]{1, 1},
+                new int[]{1, 1},
+        }), new int[]{0, 1});
+
+        assertArrayEquals(solution(new int[][]{
+                new int[]{0, 0},
+                new int[]{0, 0},
+        }), new int[]{1, 0});
+    }
+
+    @Test
+    void testSample() {
+        assertArrayEquals(solution(new int[][]{
+                new int[]{1, 1, 0, 0},
+                new int[]{1, 0, 0, 0},
+                new int[]{1, 0, 0, 1},
+                new int[]{1, 1, 1, 1},
+        }), new int[]{4, 9});
     }
 }
