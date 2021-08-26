@@ -1,4 +1,3 @@
-// 특정 조건을 만족하는 최소 지점을 찾는 이진 탐색
 function binarySearch(low, high, condition) {
   const mid = Math.floor((low + high) / 2);
 
@@ -6,14 +5,24 @@ function binarySearch(low, high, condition) {
     return low;
   }
 
-  if (condition(mid)) {
-    return binarySearch(low, mid - 1, condition);
-  }
-
-  return binarySearch(mid + 1, high, condition);
+  return condition(mid)
+    ? binarySearch(low, mid - 1, condition)
+    : binarySearch(mid + 1, high, condition);
 }
 
-test('test works', () => {
+function solution(n, times) {
+  function completable(time) {
+    const sumOfPeople = times
+      .map((t) => Math.floor(time / t))
+      .reduce((a, c) => a + c, 0);
+
+    return n <= sumOfPeople;
+  }
+
+  return binarySearch(0, 10 ** 18, completable);
+}
+
+test('binarySearch', () => {
   const array = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
   expect(binarySearch(
@@ -27,4 +36,6 @@ test('test works', () => {
   )).toBe(6);
 });
 
-// TODO: 특정 '시간'에 '모든 사람이 심사'를 완료할 수 있는지 여부를 반환하는 함수
+test('sample', () => {
+  expect(solution(6, [7, 10])).toBe(28);
+});
