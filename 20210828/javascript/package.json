@@ -1,0 +1,20 @@
+{
+  "name": "20210828",
+  "version": "1.0.0",
+  "description": "https://programmers.co.kr/learn/courses/30/lessons/42860?language=python3",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "watch": "npm test -- --watchAll"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/jest": "^27.0.1",
+    "eslint": "^7.32.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-plugin-import": "^2.24.2",
+    "jest": "^27.1.0"
+  }
+}
