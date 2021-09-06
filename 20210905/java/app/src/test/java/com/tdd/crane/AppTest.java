@@ -4,11 +4,142 @@
 package com.tdd.crane;
 
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.platform.commons.function.Try;
+
+import java.util.*;
+import java.util.stream.IntStream;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class AppTest {
-    @Test void appHasAGreeting() {
-        App classUnderTest = new App();
-        assertNotNull(classUnderTest.getGreeting(), "app should have a greeting");
+    @Test
+    void testSelect() {
+        Line line = new Line(0, 0, 0, 4, 2);
+        assertEquals(line.select(), Optional.of(4));
+        assertEquals(line.select(), Optional.of(2));
+    }
+
+    @Test
+    void testEmptySelect() {
+        Line line = new Line(0, 0, 0, 0, 0);
+        assertEquals(line.select(), Optional.empty());
+    }
+
+    @Test
+    void testBoardSelect() {
+        Board board = new Board(
+                new int[][]{
+                        new int[]{0, 0, 0, 0, 0},
+                        new int[]{0, 0, 1, 0, 3},
+                        new int[]{0, 2, 5, 0, 1},
+                        new int[]{4, 2, 4, 4, 2},
+                        new int[]{3, 5, 1, 3, 1},
+                });
+
+        assertEquals(board.select(1), Optional.of(4));
+        assertEquals(board.select(2), Optional.of(2));
+    }
+
+    @Test
+    void countBomb() {
+        MagicBasket basket = new MagicBasket();
+        assertEquals(basket.count(), 0);
+
+        basket.put(3);
+        assertEquals(basket.count(), 0);
+
+        basket.put(3);
+        assertEquals(basket.count(), 2);
+
+        basket.put(4);
+        assertEquals(basket.count(), 2);
+
+        basket.put(4);
+        assertEquals(basket.count(), 4);
+    }
+
+    @Test
+    void testSample() {
+        assertEquals(solution(
+                new int[][]{
+                        new int[]{0, 0, 0, 0, 0},
+                        new int[]{0, 0, 1, 0, 3},
+                        new int[]{0, 2, 5, 0, 1},
+                        new int[]{4, 2, 4, 4, 2},
+                        new int[]{3, 5, 1, 3, 1},
+                },
+                new int[]{1, 5, 3, 5, 1, 2, 1, 4}
+        ), 4);
+    }
+
+    int solution(int[][] boardData, int[] moves) {
+        Board board = new Board(boardData);
+        MagicBasket basket = new MagicBasket();
+
+        for (int line : moves) {
+            board.select(line).ifPresent(basket::put);
+        }
+
+        return basket.count();
+    }
+
+    static class Line {
+        private final Stack<Integer> numbers = new Stack<>();
+
+        Line(int... numbers) {
+            this.numbers.addAll(IntStream.range(0, numbers.length)
+                    .boxed()
+                    .sorted(Collections.reverseOrder())
+                    .map(i -> numbers[i])
+                    .filter(n -> n != 0)
+                    .toList()
+            );
+        }
+
+        Optional<Integer> select() {
+            return Try.call(numbers::pop).toOptional();
+        }
+    }
+
+    static class Board {
+        private final List<Line> lines;
+
+        public Board(int[][] ints) {
+
+            lines = IntStream.range(0, ints.length)
+                    .mapToObj(i -> new Line(
+                            Arrays.stream(ints).mapToInt(row -> row[i]).toArray()
+                    ))
+                    .toList();
+        }
+
+        Optional<Integer> select(int lineNumber) {
+            Line line = lines.get(lineNumber - 1);
+            return line.select();
+        }
+    }
+
+    static class MagicBasket {
+        private final Stack<Integer> stack;
+        private int count;
+
+        MagicBasket() {
+            this.count = 0;
+            this.stack = new Stack<>();
+        }
+
+        int count() {
+            return this.count;
+        }
+
+        void put(int doll) {
+            if (!stack.isEmpty() && stack.peek() == doll) {
+                stack.pop();
+                count += 2;
+                return;
+            }
+
+            stack.add(doll);
+        }
     }
 }
