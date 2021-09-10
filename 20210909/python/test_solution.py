@@ -1,53 +1,30 @@
-def win_rate(head2head, boxer):
-    results = head2head[boxer - 1]
-    wins, loses = (results.count(i) for i in ("W", "L"))
+def win_rate(match_results):
+    wins, loses = (match_results.count(i) for i in ("W", "L"))
+    total = wins + loses
 
-    return wins / total if (total := (wins + loses)) else 0
+    return wins / total if total != 0 else 0
 
 
-def wins_over_heavier(weights, head2head, boxer):
+def wins_over_heavier(boxer_weight, match_results, weights):
     return sum(
-        r == "W" and weights[i] > weights[boxer - 1]
-        for i, r in enumerate(head2head[boxer - 1])
+        match_result == "W" and boxer_weight < enemy_weight
+        for match_result, enemy_weight in zip(match_results, weights)
     )
 
 
 def solution(weights, head2head):
+    def comparators(boxer):
+        match_results = head2head[boxer - 1]
+        boxer_weight = weights[boxer - 1]
+
+        return (
+            win_rate(match_results),
+            wins_over_heavier(boxer_weight, match_results, weights),
+            boxer_weight,
+        )
+
     boxers = list(range(1, len(weights) + 1))
-
-    return sorted(
-        boxers,
-        key=lambda boxer: (
-            win_rate(head2head, boxer),
-            wins_over_heavier(weights, head2head, boxer),
-            weights[boxer - 1],
-        ),
-        reverse=True,
-    )
-
-
-def test_win_rate():
-    assert win_rate(["NL", "WN"], 2) == 1
-    assert win_rate(["NLW", "WNL", "LWN"], 1) == 0.5
-
-
-def test_rate_no_match():
-    assert (
-        wins_over_heavier(
-            [50, 82, 64, 120],
-            ["NLWL", "WNLL", "LWNW", "WWLN"],
-            3,
-        )
-        == 2
-    )
-    assert (
-        wins_over_heavier(
-            [50, 82, 64, 120],
-            ["NLWL", "WNLL", "LWNW", "WWLN"],
-            4,
-        )
-        == 0
-    )
+    return sorted(boxers, key=lambda boxer: comparators(boxer), reverse=True)
 
 
 def test_sample():
