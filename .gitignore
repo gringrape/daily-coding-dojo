@@ -2,3 +2,5 @@ node_modules
 project
 target
 __pycache__
+.parcel-cache
+dist
