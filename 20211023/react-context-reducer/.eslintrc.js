@@ -4,6 +4,10 @@ module.exports = {
     es2021: true,
     jest: true,
   },
+  globals: {
+    context: 'readonly',
+    set: 'readonly',
+  },
   extends: [
     'plugin:react/recommended',
     'airbnb',
@@ -49,6 +53,16 @@ module.exports = {
     'object-curly-spacing': ['error', 'always'],
     'key-spacing': ['error', { mode: 'strict' }],
     'arrow-spacing': ['error', { before: true, after: true }],
+    'jsx-a11y/label-has-associated-control': ['error', {
+      required: {
+        some: ['nesting', 'id'],
+      },
+    }],
+    'jsx-a11y/label-has-for': ['error', {
+      required: {
+        some: ['nesting', 'id'],
+      },
+    }],
     'import/no-extraneous-dependencies': ['error', {
       devDependencies: [
         '**/*.test.js',
