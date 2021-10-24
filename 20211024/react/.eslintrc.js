@@ -29,6 +29,16 @@ module.exports = {
     },
   },
   rules: {
+    'jsx-a11y/label-has-associated-control': ['error', {
+      required: {
+        some: ['nesting', 'id'],
+      },
+    }],
+    'jsx-a11y/label-has-for': ['error', {
+      required: {
+        some: ['nesting', 'id'],
+      },
+    }],
     indent: ['error', 2],
     'no-trailing-spaces': 'error',
     curly: 'error',
