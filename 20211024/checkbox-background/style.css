@@ -1,0 +1,43 @@
+.checkbox {
+  display: grid;
+  grid-template-columns: min-content auto;
+  font-size: 2rem;
+  grid-gap: 0.5rem;
+}
+
+.checkbox__input > input {
+  opacity: 0;
+  width: 1em;
+  height: 1em;
+}
+
+.checkbox__control {
+  display: inline-grid;
+  width: 1em;
+  height: 1em;
+  border-radius: 0.25em;
+  border: 0.1em solid currentColor;
+  padding: auto;
+}
+
+.checkbox__input {
+  display: grid;
+  grid-template-areas: 'checkbox';
+}
+
+.checkbox__input > * {
+  grid-area: checkbox;
+}
+
+.checkbox__control svg {
+  opacity: 0;
+  color: white;
+}
+
+.checkbox__input input:checked + .checkbox__control {
+  background-color: orange;
+}
+
+.checkbox__input input:checked + .checkbox__control svg {
+  opacity: 1;
+}
