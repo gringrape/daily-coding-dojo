@@ -1,6 +1,12 @@
 import * as ReactDOM from 'react-dom';
 
-import App from './App';
+import TodoApp from './TodoApp';
+import { TasksProvide } from './context/TaskContext';
 
 const container = document.getElementById('app');
-ReactDOM.render(<App />, container);
+ReactDOM.render(
+  <TasksProvide>
+    <TodoApp />
+  </TasksProvide>,
+  container,
+);
