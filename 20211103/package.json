@@ -1,0 +1,30 @@
+{
+  "name": "20211103",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "출처: 웹, 앱 API 개발을 위한 graphQL http://www.yes24.com/Product/Goods/81537382",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "nodemon --ext js,json,graphql",
+    "test": "jest",
+    "watch": "npm test -- --watchAll"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "apollo-server": "^3.4.1",
+    "graphql": "^15.7.2",
+    "jest": "^27.3.1",
+    "nodemon": "^2.0.14"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.16.0",
+    "@babel/preset-env": "^7.16.0",
+    "@types/jest": "^27.0.2",
+    "babel-jest": "^27.3.1",
+    "eslint": "^7.32.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-plugin-import": "^2.25.2"
+  }
+}
