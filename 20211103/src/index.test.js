@@ -1,5 +1,25 @@
-import { sum } from './index';
+import { graphql, buildSchema } from 'graphql';
 
-test('test works', () => {
-  expect(sum(1, 1)).toBe(2);
+describe('resolver', () => {
+  const schema = buildSchema(`
+    type Query {
+      hello: String
+    }
+  `);
+
+  const root = { hello: () => 'Hello world!' };
+
+  async function execute(query, resolvers) {
+    const { data } = await graphql(schema, query, resolvers);
+
+    return data;
+  }
+
+  it('resolves query', async () => {
+    const query = '{ hello }';
+
+    const { hello } = await execute(query, root);
+
+    expect(hello).toBe('Hello world!');
+  });
 });
