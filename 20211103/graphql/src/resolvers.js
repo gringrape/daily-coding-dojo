@@ -1,6 +1,15 @@
+import photos from './photos.js';
+
 const resolvers = {
   Query: {
-    totalPhotos: () => 42,
+    totalPhotos: () => photos.length,
+  },
+  Mutation: {
+    postPhoto: (args) => {
+      photos.push(args);
+
+      return true;
+    },
   },
 };
 

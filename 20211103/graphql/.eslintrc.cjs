@@ -4,6 +4,10 @@ module.exports = {
     node: true,
     jest: true,
   },
+  globals: {
+    given: 'readonly',
+    context: 'readonly',
+  },
   extends: [
     'airbnb-base',
   ],
