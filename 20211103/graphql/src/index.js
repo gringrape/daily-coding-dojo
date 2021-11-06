@@ -1,4 +1,16 @@
-export const sum = (a, b) => a + b;
+import { ApolloServer } from 'apollo-server';
 
-// TODO: delete this
-export const xx = '';
+import typeDefs from './typeDefs.js';
+import resolvers from './resolvers.js';
+
+const { log: print } = console;
+
+const server = new ApolloServer({
+  typeDefs,
+  resolvers,
+});
+
+server.listen()
+  .then(({ url }) => {
+    print(`GraphQL service running on ${url}`);
+  });
