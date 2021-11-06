@@ -1,25 +1,29 @@
 import { graphql, buildSchema } from 'graphql';
 
+import rootResolvers from './resolvers';
+import typeDefs from './typeDefs';
+
 describe('resolver', () => {
-  const schema = buildSchema(`
-    type Query {
-      hello: String
-    }
-  `);
+  const schema = buildSchema(typeDefs);
 
-  const root = { hello: () => 'Hello world!' };
-
-  async function execute(query, resolvers) {
-    const { data } = await graphql(schema, query, resolvers);
+  async function execute({ resolvers, query }) {
+    const { data } = await graphql(
+      schema,
+      query,
+      resolvers,
+    );
 
     return data;
   }
 
   it('resolves query', async () => {
-    const query = '{ hello }';
+    const data = await execute({
+      resolvers: rootResolvers.Query,
+      query: `{ 
+        totalPhotos 
+      }`,
+    });
 
-    const { hello } = await execute(query, root);
-
-    expect(hello).toBe('Hello world!');
+    expect(data.totalPhotos).toBe(42);
   });
 });
