@@ -1,0 +1,4 @@
+package tddbe;
+
+interface Expression {
+}
