@@ -403,3 +403,16 @@ public Money plus(Money addend) {
     assertEquals(Money.dollar(10), reduced);
 }
 ```
+
+### 다른 통화로 바꾸기
+
+2 프랑은 1 달러
+
+```java
+@Test void testReduceMoneyDifferentCurrency() {
+    Bank bank = new Bank();
+    bank.addRate("CHF", "USD", 2);
+    Money result = bank.reduce(Money.franc(2), "USD");
+    assertEquals(Money.dollar(1), result);
+}
+```

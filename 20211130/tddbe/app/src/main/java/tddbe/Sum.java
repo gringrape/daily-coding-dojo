@@ -1,11 +1,16 @@
 package tddbe;
 
 public class Sum implements Expression {
-    Expression augend;
-    Expression addend;
+    Money augend;
+    Money addend;
 
-    Sum(Expression augend, Expression addend) {
+    Sum(Money augend, Money addend) {
         this.augend = augend;
         this.addend = addend;
+    }
+
+    public Money reduce(Bank bank, String currency) {
+        int sum = augend.amount + addend.amount;
+        return new Money(sum, currency);
     }
 }
