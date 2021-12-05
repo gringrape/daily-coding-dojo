@@ -21,60 +21,35 @@ function createElement(tagName, props, ...children) {
   return element;
 }
 
-function calculate(accumulator, result, operation) {
+function calculate(opearand1, opearand2, operation) {
   return ({
-    '+': accumulator + result,
-    '-': accumulator - result,
-    '*': accumulator * result,
-    '/': accumulator / result,
+    '+': opearand1 + opearand2,
+    '-': opearand1 - opearand2,
+    '*': opearand1 * opearand2,
+    '/': opearand1 / opearand2,
   }[operation]);
 }
 
-const reducers = {
-  initialNumber: (state, number) => ({
-    operation: null,
-    result: number,
-    accumulator: 0,
-  }),
-  inputNumber: (state, number) => ({
-    ...state,
-    result: 10 * state.result + number,
-  }),
-  inputOperation: ({ accumulator, result, operation }, operator) => ({
-    result: 0,
-    accumulator: operation
-      ? calculate(accumulator, result, operation)
-      : result,
-    operation: operator,
-  }),
-  inputEquator: ({ accumulator, result, operation }) => ({
-    result: calculate(accumulator, result, operation),
-    accumulator: 0,
-    operation: '=',
-  }),
-};
-
 export default function renderApp(state = {
-  result: 0,
+  value: 0,
   accumulator: 0,
   operation: null,
 }) {
-  const { result, accumulator, operation } = state;
+  const { value, accumulator, operation } = state;
 
   const handleClickNumber = (number) => {
-    renderApp(
-      operation === '='
-        ? reducers.initialNumber(state, number)
-        : reducers.inputNumber(state, number),
-    );
+    renderApp({
+      ...state,
+      value: value * 10 + number,
+    });
   };
 
   const handleClickOperator = (operator) => {
-    renderApp(
-      operator === '='
-        ? reducers.inputEquator(state)
-        : reducers.inputOperation(state, operator),
-    );
+    renderApp({
+      value: 0,
+      accumulator: calculate(accumulator, value, operation) ?? value,
+      operation: operator,
+    });
   };
 
   const numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0];
@@ -84,7 +59,7 @@ export default function renderApp(state = {
     <div>
       <p>간단 계산기</p>
       <p id="value">
-        {result === 0 ? accumulator : result}
+        {value === 0 ? accumulator : value}
       </p>
       <ul>
         {numbers.map((number) => (
