@@ -2,7 +2,7 @@ import { renderHook, act } from '@testing-library/react-hooks';
 
 import { RecoilRoot } from 'recoil';
 
-import { usePosts } from './hooks';
+import { useDates } from './hooks';
 
 describe('usePosts', () => {
   const wrapper = ({ children }: { children: any}) => (
@@ -11,33 +11,25 @@ describe('usePosts', () => {
     </RecoilRoot>
   );
 
-  const render = () => renderHook(() => usePosts(), { wrapper });
+  const render = () => renderHook(() => useDates(), { wrapper });
 
-  it('uses a list of post', () => {
-    const { result } = render();
-
-    expect(result.current.posts).toHaveLength(0);
-  });
-
-  it('appends a new post', () => {
+  it('moves to next month', () => {
     const { result } = render();
 
     act(() => {
-      result.current.addPost();
+      result.current.nextMonth();
     });
 
-    expect(result.current.posts).toHaveLength(1);
+    expect(result.current.state.month).toBe(1);
   });
 
-  describe('loadPosts', () => {
-    it('fetches a list of post', async () => {
-      const { result } = render();
+  it('moves to prev month', () => {
+    const { result } = render();
 
-      await act(async () => {
-        await result.current.loadPosts();
-      });
-
-      expect(result.current.posts).not.toHaveLength(0);
+    act(() => {
+      result.current.prevMonth();
     });
+
+    expect(result.current.state.month).toBe(11);
   });
 });

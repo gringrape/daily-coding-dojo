@@ -1,12 +1,16 @@
 import { atom } from 'recoil';
 
-export interface Post {
-  id: number;
-  title: string;
-  body: string;
-}
-
-export const postsState = atom<Post[]>({
-  key: 'postsState',
-  default: [],
+export const dateState = atom<{
+  date: Date | null;
+  year: number;
+  month: number;
+}>({
+  key: 'dateState',
+  default: {
+    date: new Date(),
+    year: new Date().getFullYear(),
+    month: new Date().getMonth() + 1,
+  },
 });
+
+export const xx = '';
