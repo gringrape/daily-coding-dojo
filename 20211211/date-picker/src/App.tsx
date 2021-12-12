@@ -1,5 +1,7 @@
+import Calendar from './Calendar';
+
 export default function App() {
   return (
-    <p>Hello, world!</p>
+    <Calendar year={2021} month={11} />
   );
 }
