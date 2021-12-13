@@ -11,4 +11,12 @@ export default class CustomDate extends Date {
   toString(): string {
     return `${this.getFullYear()} 년 ${this.getMonth()} 월 ${this.getDate()} 일`;
   }
+
+  toDate(): Date {
+    return new Date(super.toString());
+  }
+
+  static from(date: Date): CustomDate {
+    return new CustomDate(date.toString());
+  }
 }
