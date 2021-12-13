@@ -66,5 +66,7 @@ module.exports = {
     'react/jsx-filename-extension': [2, {
       extensions: ['.js', '.jsx', '.ts', '.tsx'],
     }],
+    'react/require-default-props': 'off',
+    'no-unused-vars': 'off',
   },
 };
