@@ -54,7 +54,7 @@ describe('DatePicker', () => {
     const { container } = renderDatePicker();
 
     expect(container).toHaveTextContent('2021');
-    expect(container).toHaveTextContent('화, 11 월 23');
+    expect(container).toHaveTextContent('화, 11월 23');
   });
 
   it('listens click open button', () => {

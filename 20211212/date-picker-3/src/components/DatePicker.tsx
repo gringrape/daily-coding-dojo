@@ -23,13 +23,55 @@ const Overlay = styled.div<{ visible: boolean }>`
 
 const Modal = styled.div`
   width: 310px;
-  height: 480px;
   background-color: white;
+  border-radius: 4px;
+  overflow: hidden;
+`;
+
+const Header = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0 24px;
+  height: 100px;
+  background-color: #ff7000;
+  
+  & p {
+    margin: 0;
+    padding: 0;
+  }
+
+  & .year {
+    font-size: 1rem;
+    line-height: 1.75;
+    color: rgba(255, 255, 255, 0.54);
+  }
+
+  & .datestring {
+    font-size: 2.125rem;
+    line-height: 1.235;
+    color: #ffffff;
+  }
 `;
 
 const Footer = styled.div`
   display: flex;
   justify-content: flex-end;
+  align-items: center;
+  padding: 8px;
+
+  & > button {
+    margin-left: 8px;
+    padding: 6px 8px;
+    min-width: 64px;
+    color: #ff7000;
+    font-size: 0.875rem;
+    font-weight: 500;
+    background-color: #fff;
+    border: none;
+    outline: none;
+    cursor: pointer;
+  }
 `;
 
 export default function DatePicker({
@@ -83,11 +125,14 @@ export default function DatePicker({
       </button>
       <Overlay visible={isCalendarOpen}>
         <Modal ref={ref}>
-          <div>
-            <p>{year}</p>
-            <p>{`${weekDay}, ${month} 월 ${day}`}</p>
-          </div>
-          <Calendar shouldDisableDate={shouldDisableDate} />
+          <Header>
+            <p className="year">{year}</p>
+            <p className="datestring">{`${weekDay}, ${month}월 ${day}`}</p>
+          </Header>
+          <Calendar
+            currentDate={current}
+            shouldDisableDate={shouldDisableDate}
+          />
           <Footer>
             <button type="button" onClick={handleClickCancel}>
               취소

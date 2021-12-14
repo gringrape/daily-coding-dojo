@@ -1,4 +1,5 @@
 import { render, fireEvent } from '@testing-library/react';
+import CustomDate from '../customs/CustomDate';
 
 import Calendar from './Calendar';
 
@@ -8,6 +9,7 @@ const pickDay = jest.fn();
 
 jest.mock('../hooks/useCalendar', () => () => ({
   state: {
+    date: new CustomDate('2021-11-01'),
     year: 2021,
     month: 11,
   },
@@ -20,7 +22,12 @@ describe('Calendar', () => {
   const handleClickDay = jest.fn();
 
   function renderCalendar(shouldDisableDate: (day: Date) => boolean = () => false) {
-    return render(<Calendar shouldDisableDate={shouldDisableDate} />);
+    return render((
+      <Calendar
+        currentDate={new Date()}
+        shouldDisableDate={shouldDisableDate}
+      />
+    ));
   }
 
   beforeEach(() => {

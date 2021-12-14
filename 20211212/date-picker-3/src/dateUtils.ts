@@ -1,4 +1,5 @@
 import dayjs from 'dayjs';
+import CustomDate from './customs/CustomDate';
 
 export function getWeeks(year: number, month: number) {
   const thisMonth = dayjs(`${year}-${month}`);
@@ -17,4 +18,10 @@ export function isInMonth(day: Date, year: number, month: number) {
   const lastDay = dayjs(`${year}-${month}`).endOf('month').toDate();
 
   return day >= firstDay && day <= lastDay;
+}
+
+export function isSameDate(date1: Date, date2: Date) {
+  return (
+    CustomDate.from(date1).toString() === CustomDate.from(date2).toString()
+  );
 }
