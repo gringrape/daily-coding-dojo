@@ -4,6 +4,9 @@ node_modules
 # parcel
 /.parcel-cache/
 
+# next
+.next/
+
 # dist
 /dist/
 
