@@ -15,10 +15,12 @@ WORDLE 게임을 TDD 로 만들어봅시다.
 npm init -y
 npm i --save-dev jest @types/jest 
 ```
+
 ### @swc/jest 설치
 ```bash
 npm install --save-dev @swc/core @swc/jest
 ```
+
 `jest.config.js`:
 ```javascript
 module.exports = {
@@ -27,3 +29,4 @@ module.exports = {
 	},
 }
 ```
+
