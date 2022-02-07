@@ -4,11 +4,24 @@
 package coding.interview.java;
 
 import org.junit.jupiter.api.Test;
+
+import java.util.Arrays;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class AppTest {
-    @Test void appHasAGreeting() {
-        App classUnderTest = new App();
-        assertNotNull(classUnderTest.getGreeting(), "app should have a greeting");
+    @Test void singleNumber() {
+        assertTrue(parity(3));
+        assertTrue(parity(5));
+
+        assertFalse(parity(4));
+        assertFalse(parity(7));
+    }
+
+    private boolean parity(int i) {
+        return Arrays.stream(Integer.toBinaryString(i)
+                .split(""))
+                .map(Integer::parseInt)
+                .reduce(0, Integer::sum) % 2 == 0;
     }
 }
