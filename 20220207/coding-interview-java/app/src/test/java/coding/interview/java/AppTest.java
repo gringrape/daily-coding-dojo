@@ -6,11 +6,14 @@ package coding.interview.java;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
+import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class AppTest {
-    @Test void singleNumber() {
+    @Test
+    void singleNumber() {
         assertTrue(parity(3));
         assertTrue(parity(5));
 
@@ -19,9 +22,22 @@ class AppTest {
     }
 
     private boolean parity(int i) {
+        return Stream.iterate(i, k -> k > 0, k -> k >> 1)
+                .mapToInt(k -> k).sum() % 2 == 0;
+    }
+
+    private boolean parity01(int i) {
         return Arrays.stream(Integer.toBinaryString(i)
-                .split(""))
+                        .split(""))
                 .map(Integer::parseInt)
                 .reduce(0, Integer::sum) % 2 == 0;
+    }
+
+    private boolean parity02(int i) {
+        return Arrays.stream(Integer.toBinaryString(i)
+                        .split(""))
+                .map(Integer::parseInt)
+                .mapToInt(j -> j).sum() % 2 == 0;
+
     }
 }
