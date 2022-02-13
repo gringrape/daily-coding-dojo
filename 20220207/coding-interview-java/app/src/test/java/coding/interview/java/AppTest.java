@@ -5,40 +5,21 @@ package coding.interview.java;
 
 import org.junit.jupiter.api.Test;
 
-import java.util.Arrays;
-import java.util.stream.Stream;
+import java.util.stream.LongStream;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 
 class AppTest {
+    public int parity(long number) {
+        return (int) LongStream.iterate(number, n -> n > 0, n -> n >> 1)
+                .map(n -> n & 1)
+                .sum() % 2;
+    }
+
     @Test
-    void singleNumber() {
-        assertTrue(parity(3));
-        assertTrue(parity(5));
-
-        assertFalse(parity(4));
-        assertFalse(parity(7));
-    }
-
-    private boolean parity(int i) {
-        int sumOfNoneZeros = Stream.iterate(i, k -> k > 0, k -> k >> 1)
-                .mapToInt(k -> k & 1).sum();
-        return sumOfNoneZeros % 2 == 0;
-    }
-
-    private boolean parity01(int i) {
-        return Arrays.stream(Integer.toBinaryString(i)
-                        .split(""))
-                .map(Integer::parseInt)
-                .reduce(0, Integer::sum) % 2 == 0;
-    }
-
-    private boolean parity02(int i) {
-        return Arrays.stream(Integer.toBinaryString(i)
-                        .split(""))
-                .map(Integer::parseInt)
-                .mapToInt(j -> j).sum() % 2 == 0;
-
+    void testParity() {
+        assertThat(parity(11L)).isEqualTo(1);
+        assertThat(parity(8L)).isEqualTo(1);
+        assertThat(parity(15L)).isEqualTo(0);
     }
 }
