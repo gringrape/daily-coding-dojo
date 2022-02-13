@@ -22,8 +22,9 @@ class AppTest {
     }
 
     private boolean parity(int i) {
-        return Stream.iterate(i, k -> k > 0, k -> k >> 1)
-                .mapToInt(k -> k).sum() % 2 == 0;
+        int sumOfNoneZeros = Stream.iterate(i, k -> k > 0, k -> k >> 1)
+                .mapToInt(k -> k & 1).sum();
+        return sumOfNoneZeros % 2 == 0;
     }
 
     private boolean parity01(int i) {
