@@ -1,0 +1,22 @@
+{
+  "name": "finite-state-machine-example",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "watch": "jest --watchAll"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@swc/core": "^1.2.154",
+    "@swc/jest": "^0.2.20",
+    "@types/jest": "^27.4.1",
+    "eslint": "^8.11.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.25.4",
+    "jest": "^27.5.1",
+    "regenerator-runtime": "^0.13.9"
+  }
+}
