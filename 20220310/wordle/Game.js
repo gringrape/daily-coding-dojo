@@ -3,7 +3,7 @@ class Game {
     this.answer = answer;
   }
 
-  checkCorrect(guess) {
+  findGreenPositionsFor(guess) {
     const guessLetters = guess.getLetters();
     const answerLetters = this.answer.getLetters();
     const result = [];
