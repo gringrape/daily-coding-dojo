@@ -44,3 +44,20 @@ lazy val root = (project in file(".")).
 ```
 
 scalaTest 의 설정파일을 이용하자.
+
+```
+sbt new scala/scalatest-example.g8
+```
+
+### AkkaHttp 관련 의존성 추가
+`build.sbt`:
+```
+val AkkaVersion = "2.6.8"
+val AkkaHttpVersion = "10.2.9"
+libraryDependencies ++= Seq(
+  "com.typesafe.akka" %% "akka-actor-typed" % AkkaVersion,
+  "com.typesafe.akka" %% "akka-stream" % AkkaVersion,
+  "com.typesafe.akka" %% "akka-http" % AkkaHttpVersion
+)
+```
+
