@@ -52,6 +52,23 @@ class KeyPad {
     private val leftNumbers = listOf(1, 4, 7)
     private val rightNumbers = listOf(3, 6, 9)
 
+    private val coordinates = mapOf(
+        "*" to listOf(0, 0),
+        "7" to listOf(0, 1),
+        "4" to listOf(0, 2),
+        "1" to listOf(0, 3),
+
+        "0" to listOf(1, 0),
+        "8" to listOf(1, 1),
+        "5" to listOf(1, 2),
+        "2" to listOf(1, 3),
+
+        "#" to listOf(2, 0),
+        "9" to listOf(2, 1),
+        "6" to listOf(2, 2),
+        "3" to listOf(2, 3),
+    )
+
     fun isLeftNumber(i: Int): Boolean {
         return leftNumbers.contains(i)
     }
@@ -61,23 +78,6 @@ class KeyPad {
     }
 
     fun calculateDistance(button1: String, button2: String): Int {
-        val coordinates = mapOf(
-            "*" to listOf(0, 0),
-            "7" to listOf(0, 1),
-            "4" to listOf(0, 2),
-            "1" to listOf(0, 3),
-
-            "0" to listOf(1, 0),
-            "8" to listOf(1, 1),
-            "5" to listOf(1, 2),
-            "2" to listOf(1, 3),
-
-            "#" to listOf(2, 0),
-            "9" to listOf(2, 1),
-            "6" to listOf(2, 2),
-            "3" to listOf(2, 3),
-        )
-
         val (x1, y1) = coordinates[button1].orEmpty()
         val (x2, y2) = coordinates[button2].orEmpty()
 
