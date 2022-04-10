@@ -3,12 +3,134 @@
  */
 package keypad
 
+import kotlin.math.abs
 import kotlin.test.Test
-import kotlin.test.assertNotNull
+import kotlin.test.assertEquals
+
+class Hands(handedness: String) {
+    private var leftHandPosition: String = "*"
+    private var rightHandPosition: String = "#"
+
+    private val history: MutableList<String> = mutableListOf()
+
+    private val handedness: String = when (handedness) {
+        "left" -> "L"
+        "right" -> "R"
+        else -> ""
+    }
+
+    fun push(keyPad: KeyPad, vararg numbers: Int) {
+        numbers.forEach { number ->
+            val numberButton = number.toString()
+
+            val distanceFromLeftHand by lazy { keyPad.calculateDistance(numberButton, leftHandPosition) }
+            val distanceFromRightHand by lazy { keyPad.calculateDistance(numberButton, rightHandPosition) }
+
+            val hand = when {
+                keyPad.isLeftNumber(number) -> "L"
+                keyPad.isRightNumber(number) -> "R"
+                distanceFromLeftHand < distanceFromRightHand -> "L"
+                distanceFromLeftHand > distanceFromRightHand -> "R"
+                else -> handedness
+            }
+
+            when(hand) {
+                "L" -> leftHandPosition = numberButton
+                "R" -> rightHandPosition = numberButton
+            }
+
+            history.add(hand)
+        }
+    }
+
+    fun history(): String {
+        return history.joinToString("")
+    }
+}
+
+class KeyPad {
+    private val leftNumbers = listOf(1, 4, 7)
+    private val rightNumbers = listOf(3, 6, 9)
+
+    fun isLeftNumber(i: Int): Boolean {
+        return leftNumbers.contains(i)
+    }
+
+    fun isRightNumber(i: Int): Boolean {
+        return rightNumbers.contains(i)
+    }
+
+    fun calculateDistance(button1: String, button2: String): Int {
+        val coordinates = mapOf(
+            "*" to listOf(0, 0),
+            "7" to listOf(0, 1),
+            "4" to listOf(0, 2),
+            "1" to listOf(0, 3),
+
+            "0" to listOf(1, 0),
+            "8" to listOf(1, 1),
+            "5" to listOf(1, 2),
+            "2" to listOf(1, 3),
+
+            "#" to listOf(2, 0),
+            "9" to listOf(2, 1),
+            "6" to listOf(2, 2),
+            "3" to listOf(2, 3),
+        )
+
+        val (x1, y1) = coordinates[button1].orEmpty()
+        val (x2, y2) = coordinates[button2].orEmpty()
+
+        return abs(x2 - x1) + abs(y2 - y1)
+    }
+}
 
 class AppTest {
-    @Test fun appHasAGreeting() {
-        val classUnderTest = App()
-        assertNotNull(classUnderTest.greeting, "app should have a greeting")
+    @Test
+    fun testPushingLeftButton() {
+        val hands = Hands("left")
+        val keyPad = KeyPad()
+
+        hands.push(keyPad, 1)
+
+        assertEquals("L", hands.history())
+    }
+
+    @Test
+    fun testPushingMultipleButtons() {
+        val hands = Hands("left")
+        val keyPad = KeyPad()
+
+        hands.push(keyPad, 1, 4)
+
+        assertEquals("LL", hands.history())
+    }
+
+    @Test
+    fun testPushingRightButtons() {
+        val hands = Hands("left")
+        val keyPad = KeyPad()
+
+        hands.push(keyPad, 1, 3, 4)
+
+        assertEquals("LRL", hands.history())
+    }
+
+    @Test
+    fun testCalculateDistance() {
+        val keyPad = KeyPad()
+
+        assertEquals(1, keyPad.calculateDistance("*", "0"))
+        assertEquals(3, keyPad.calculateDistance("*", "5"))
+    }
+
+    @Test
+    fun testPushingMiddleButtons() {
+        val hands = Hands("left")
+        val keyPad = KeyPad()
+
+        hands.push(keyPad, 2, 0)
+
+        assertEquals("LR", hands.history())
     }
 }
