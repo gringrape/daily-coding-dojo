@@ -4,8 +4,84 @@
 package romanNumber;
 
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+// 1 -> "I"
+// 2 -> "II"
+
+// 기준점이 바뀐다.
 
 class AppTest {
+    private String arabicToRoman(int number) {
+        if (number < 5 - 1) {
+            return "" + "I".repeat(number);
+        }
 
+        if (number == 5 - 1) {
+            return "IV";
+        }
+
+        if (number == 5) {
+            return "V";
+        }
+
+        //
+
+        if (number < 10 - 1) {
+            return "V" + "I".repeat(number - 5);
+        }
+
+        if (number == 10 - 1) {
+            return "IX";
+        }
+
+        if (number == 10) {
+            return "X";
+        }
+
+        //
+
+        if (number < 15 - 1) {
+            return "X" + "I".repeat(number - 10);
+        }
+
+        if (number == 15 - 1) {
+            return "XIV";
+        }
+
+        if (number == 15) {
+            return "XV";
+        }
+
+        return null;
+    }
+
+    @Test
+    void under5() {
+        assertEquals("I", arabicToRoman(1));
+        assertEquals("II", arabicToRoman(2));
+        assertEquals("III", arabicToRoman(3));
+
+        assertEquals("IV", arabicToRoman(4));
+        assertEquals("V", arabicToRoman(5));
+    }
+
+    @Test
+    void under10() {
+        assertEquals("VI", arabicToRoman(6));
+        assertEquals("VII", arabicToRoman(7));
+
+        assertEquals("IX", arabicToRoman(9));
+        assertEquals("X", arabicToRoman(10));
+    }
+
+    @Test
+    void under15() {
+//        XI, XII, XIII, XIV, XV
+        assertEquals("XI", arabicToRoman(11));
+        assertEquals("XII", arabicToRoman(12));
+        assertEquals("XIV", arabicToRoman(14));
+        assertEquals("XV", arabicToRoman(15));
+    }
 }
