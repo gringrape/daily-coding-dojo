@@ -4,36 +4,97 @@
 
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+// 1. 2x2 정사각형
+// 2. 4x4 정사각형 => 패턴찾기
+// 3.
+
+
 class AppTest {
     private List<Integer> spiralOrder(int[][] matrix) {
-        if (matrix.length == 4) {
-            return List.of(
-                    matrix[0][0], matrix[0][1], matrix[0][2],
-                    matrix[0][3], matrix[1][3], matrix[2][3],
-                    matrix[3][3], matrix[3][2], matrix[3][1],
-                    matrix[3][0], matrix[2][0], matrix[1][0],
-                    matrix[1][1],
-                    matrix[1][2],
-                    matrix[2][2],
-                    matrix[2][1]
-            );
+//        if (matrix.length == 4) {
+//            return List.of(
+//                    matrix[0][0], matrix[0][1], matrix[0][2],
+//                    matrix[0][3], matrix[1][3], matrix[2][3],
+//                    matrix[3][3], matrix[3][2], matrix[3][1],
+//                    matrix[3][0], matrix[2][0], matrix[1][0],
+//                    matrix[1][1],
+//                    matrix[1][2],
+//                    matrix[2][2],
+//                    matrix[2][1]
+//            );
+//        }
+//
+        int m = matrix.length;
+        int n = matrix[0].length;
+        
+        List<Integer> result = new ArrayList<>();
+
+        int i = 0;
+        int j = 0;
+
+        while (j < n - 1) {
+            result.add(matrix[i][j]);
+            j += 1;
         }
 
-        return List.of(matrix[0][0], matrix[0][1], matrix[1][1], matrix[1][0]);
+        while (i < m - 1) {
+            result.add(matrix[i][j]);
+            i += 1;
+        }
+
+        while (j > 0) {
+            result.add(matrix[i][j]);
+            j -= 1;
+        }
+
+        while (i > 0) {
+            result.add(matrix[i][j]);
+            i -= 1;
+        }
+
+        i += 1;
+        j += 1;
+        //
+
+        while (j < n - 2) {
+            result.add(matrix[i][j]);
+            j += 1;
+        }
+
+        while (i < m - 2) {
+            result.add(matrix[i][j]);
+            i += 1;
+        }
+
+        while (j > 1) {
+            result.add(matrix[i][j]);
+            j -= 1;
+        }
+
+        while (i > 1) {
+            result.add(matrix[i][j]);
+            i -= 1;
+        }
+
+        return result;
+
     }
 
-    @Test void shellOne() {
+    @Test
+    void shellOne() {
         assertEquals(List.of(1, 2, 4, 3), spiralOrder(new int[][]{
                 new int[]{1, 2},
                 new int[]{3, 4},
         }));
     }
 
-    @Test void shellTwo() {
+    @Test
+    void shellTwo() {
         assertEquals(List.of(1, 2, 3, 4, 8, 12, 16, 15, 14, 13, 9, 5, 6, 7, 11, 10), spiralOrder(new int[][]{
                 new int[]{1, 2, 3, 4},
                 new int[]{5, 6, 7, 8},
