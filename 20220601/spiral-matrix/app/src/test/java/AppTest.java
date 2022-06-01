@@ -11,78 +11,42 @@ import static org.junit.jupiter.api.Assertions.*;
 
 // 1. 2x2 정사각형
 // 2. 4x4 정사각형 => 패턴찾기
-// 3.
-
+// 3. 추가 풀이 구상
+//  - 재귀적 풀이
 
 class AppTest {
     private List<Integer> spiralOrder(int[][] matrix) {
-//        if (matrix.length == 4) {
-//            return List.of(
-//                    matrix[0][0], matrix[0][1], matrix[0][2],
-//                    matrix[0][3], matrix[1][3], matrix[2][3],
-//                    matrix[3][3], matrix[3][2], matrix[3][1],
-//                    matrix[3][0], matrix[2][0], matrix[1][0],
-//                    matrix[1][1],
-//                    matrix[1][2],
-//                    matrix[2][2],
-//                    matrix[2][1]
-//            );
-//        }
-//
         int m = matrix.length;
         int n = matrix[0].length;
-        
+
         List<Integer> result = new ArrayList<>();
 
-        int i = 0;
-        int j = 0;
+        for (int shellIndex = 0; shellIndex < n / 2 && shellIndex < m / 2; shellIndex++) {
+            int yPosition = shellIndex;
+            int xPosition = shellIndex;
 
-        while (j < n - 1) {
-            result.add(matrix[i][j]);
-            j += 1;
-        }
+            while (xPosition < n - 1 - shellIndex) {
+                result.add(matrix[yPosition][xPosition]);
+                xPosition += 1;
+            }
 
-        while (i < m - 1) {
-            result.add(matrix[i][j]);
-            i += 1;
-        }
+            while (yPosition < m - 1 - shellIndex) {
+                result.add(matrix[yPosition][xPosition]);
+                yPosition += 1;
+            }
 
-        while (j > 0) {
-            result.add(matrix[i][j]);
-            j -= 1;
-        }
+            while (xPosition > shellIndex) {
+                result.add(matrix[yPosition][xPosition]);
+                xPosition -= 1;
+            }
 
-        while (i > 0) {
-            result.add(matrix[i][j]);
-            i -= 1;
-        }
-
-        i += 1;
-        j += 1;
-        //
-
-        while (j < n - 2) {
-            result.add(matrix[i][j]);
-            j += 1;
-        }
-
-        while (i < m - 2) {
-            result.add(matrix[i][j]);
-            i += 1;
-        }
-
-        while (j > 1) {
-            result.add(matrix[i][j]);
-            j -= 1;
-        }
-
-        while (i > 1) {
-            result.add(matrix[i][j]);
-            i -= 1;
+            while (yPosition > shellIndex) {
+                result.add(matrix[yPosition][xPosition]);
+                yPosition -= 1;
+            }
         }
 
         return result;
-
     }
 
     @Test
